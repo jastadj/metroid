@@ -28,10 +28,10 @@ bool Engine::initTiles()
     m_TilesDim.x = m_TilesTXT.getSize().x / CHUNK_SIZE;
     m_TilesDim.y = m_TilesTXT.getSize().y / CHUNK_SIZE;
 
-    for(int i = 0; i < m_TilesDim.y; i++)
+    for(int i = 0; i < int(m_TilesDim.y); i++)
     {
 
-        for(int n = 0; n < m_TilesDim.x; n++)
+        for(int n = 0; n < int(m_TilesDim.x); n++)
         {
             sf::Sprite *newsprite = new sf::Sprite;
             sf::IntRect srect;
@@ -47,6 +47,7 @@ bool Engine::initTiles()
         }
     }
 
+    return true;
 }
 
 void Engine::mainLoop()
@@ -76,7 +77,7 @@ void Engine::mainLoop()
 
 void Engine::drawTile(sf::RenderTarget *tscreen, int x, int y, unsigned int tindex)
 {
-    if(tindex >= int(m_TilesSPR.size()) )
+    if(tindex >= unsigned(m_TilesSPR.size()) )
     {
         std::cout << "drawTile : error, tile index out of bounds.  index=" << tindex << std::endl;
         return;
@@ -89,12 +90,12 @@ void Engine::drawTile(sf::RenderTarget *tscreen, int x, int y, unsigned int tind
 
 void Engine::drawSuperTile(sf::RenderTarget *tscreen, int x, int y, unsigned int tindex)
 {
-    if(tindex >= int(m_TilesSPR.size()) )
+    if(tindex >= unsigned(m_TilesSPR.size()) )
     {
         std::cout << "drawTile : error, tile index out of bounds.  index=" << tindex << std::endl;
         return;
     }
-    else if(tindex + m_TilesDim.x + 1 >= int(m_TilesSPR.size()) )
+    else if(tindex + m_TilesDim.x + 1 >= unsigned(m_TilesSPR.size()) )
     {
         std::cout << "drawSuperTile : error, tile index for 2x2 tiles out of bounds.  top left index=" << tindex << std::endl;
         return;
