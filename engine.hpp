@@ -23,6 +23,7 @@ private:
 
     //resources
     sf::Texture m_TilesTXT;
+    sf::Vector2u m_TilesDim;
     std::vector< sf::Sprite* > m_TilesSPR;
 
     //draw

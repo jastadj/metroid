@@ -25,13 +25,13 @@ bool Engine::initTiles()
         return false;
     }
 
-    unsigned int tsheet_width = m_TilesTXT.getSize().x / CHUNK_SIZE;
-    unsigned int tsheet_height = m_TilesTXT.getSize().y / CHUNK_SIZE;
+    m_TilesDim.x = m_TilesTXT.getSize().x / CHUNK_SIZE;
+    m_TilesDim.y = m_TilesTXT.getSize().y / CHUNK_SIZE;
 
-    for(int i = 0; i < tsheet_height; i++)
+    for(int i = 0; i < m_TilesDim.y; i++)
     {
 
-        for(int n = 0; n < tsheet_width; n++)
+        for(int n = 0; n < m_TilesDim.x; n++)
         {
             sf::Sprite *newsprite = new sf::Sprite;
             sf::IntRect srect;
@@ -68,7 +68,7 @@ void Engine::mainLoop()
             }
         }
 
-        drawTile(m_Screen, 1, 1, 0);
+        drawSuperTile(m_Screen, 1, 1, 14);
 
         m_Screen->display();
     }
@@ -87,16 +87,26 @@ void Engine::drawTile(sf::RenderTarget *tscreen, int x, int y, unsigned int tind
 
 }
 
-void Engine::drawTile(sf::RenderTarget *tscreen, int x, int y, unsigned int tindex)
+void Engine::drawSuperTile(sf::RenderTarget *tscreen, int x, int y, unsigned int tindex)
 {
     if(tindex >= int(m_TilesSPR.size()) )
     {
         std::cout << "drawTile : error, tile index out of bounds.  index=" << tindex << std::endl;
         return;
     }
-    else if(tindex)
+    else if(tindex + m_TilesDim.x + 1 >= int(m_TilesSPR.size()) )
+    {
+        std::cout << "drawSuperTile : error, tile index for 2x2 tiles out of bounds.  top left index=" << tindex << std::endl;
+        return;
+    }
 
-    m_TilesSPR[tindex]->setPosition(x*CHUNK_SIZE*CHUNK_SCALE, y*CHUNK_SIZE*CHUNK_SCALE);
-    tscreen->draw(*m_TilesSPR[tindex]);
+    //top left sprite
+    drawTile(tscreen, x, y, tindex);
+    //top right sprite
+    drawTile(tscreen, x+1, y, tindex+1);
+    //bottom left sprite
+    drawTile(tscreen, x, y+1, tindex+m_TilesDim.x);
+    //bottom right sprite
+    drawTile(tscreen, x+1, y+1, tindex+m_TilesDim.x+1);
 
 }
