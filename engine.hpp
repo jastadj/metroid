@@ -9,8 +9,10 @@
 
 #define CHUNK_SIZE 8
 #define CHUNK_SCALE 2
-#define SCREEN_WIDTH_CHUNKS 32*CHUNK_SCALE
-#define SCREEN_HEIGHT_CHUNKS 28*CHUNK_SCALE
+#define SCREEN_WIDTH_CHUNKS 16*2
+#define SCREEN_HEIGHT_CHUNKS 15*2
+
+//metroid map 960x900
 
 class Engine
 {
