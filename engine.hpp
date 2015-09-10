@@ -25,7 +25,11 @@ private:
     sf::Texture m_TilesTXT;
     std::vector< sf::Sprite* > m_TilesSPR;
 
+    //draw
+    void drawTile(sf::RenderTarget *tscreen, int x, int y, unsigned int tindex); //draw tile in tile coordinates
+    void drawSuperTile(sf::RenderTarget *tscreen, int x, int y, unsigned int tindex); // draw a 2x2 tile, using topleft tile as ref
 
+    //loop
     void mainLoop();
 
 public:

@@ -4,8 +4,8 @@ Engine::Engine()
 {
 
     //init screen
-    m_Screen = new sf::RenderWindow(sf::VideoMode(CHUNK_SIZE*SCREEN_WIDTH_CHUNKS,
-                                                CHUNK_SIZE*SCREEN_HEIGHT_CHUNKS,32), "Metroid");
+    m_Screen = new sf::RenderWindow(sf::VideoMode(CHUNK_SIZE*CHUNK_SCALE*SCREEN_WIDTH_CHUNKS,
+                                                CHUNK_SIZE*CHUNK_SCALE*SCREEN_HEIGHT_CHUNKS,32), "Metroid");
     initTiles();
 
     mainLoop();
@@ -25,19 +25,26 @@ bool Engine::initTiles()
         return false;
     }
 
-    for(int i = 0; i < 3; i++)
-    {
-        sf::Sprite *newsprite = new sf::Sprite;
-        sf::IntRect srect;
-        srect.left = i*CHUNK_SIZE;
-        srect.top = 0;
-        srect.width = CHUNK_SIZE;
-        srect.height = CHUNK_SIZE;
-        newsprite->setTexture(m_TilesTXT);
-        newsprite->setTextureRect(srect);
-        newsprite->setScale( CHUNK_SCALE, CHUNK_SCALE);
+    unsigned int tsheet_width = m_TilesTXT.getSize().x / CHUNK_SIZE;
+    unsigned int tsheet_height = m_TilesTXT.getSize().y / CHUNK_SIZE;
 
-        m_TilesSPR.push_back(newsprite);
+    for(int i = 0; i < tsheet_height; i++)
+    {
+
+        for(int n = 0; n < tsheet_width; n++)
+        {
+            sf::Sprite *newsprite = new sf::Sprite;
+            sf::IntRect srect;
+            srect.left = n*CHUNK_SIZE;
+            srect.top = i*CHUNK_SIZE;
+            srect.width = CHUNK_SIZE;
+            srect.height = CHUNK_SIZE;
+            newsprite->setTexture(m_TilesTXT);
+            newsprite->setTextureRect(srect);
+            newsprite->setScale( CHUNK_SCALE, CHUNK_SCALE);
+
+            m_TilesSPR.push_back(newsprite);
+        }
     }
 
 }
@@ -61,8 +68,35 @@ void Engine::mainLoop()
             }
         }
 
-        m_Screen->draw(*m_TilesSPR[0]);
+        drawTile(m_Screen, 1, 1, 0);
 
         m_Screen->display();
     }
+}
+
+void Engine::drawTile(sf::RenderTarget *tscreen, int x, int y, unsigned int tindex)
+{
+    if(tindex >= int(m_TilesSPR.size()) )
+    {
+        std::cout << "drawTile : error, tile index out of bounds.  index=" << tindex << std::endl;
+        return;
+    }
+
+    m_TilesSPR[tindex]->setPosition(x*CHUNK_SIZE*CHUNK_SCALE, y*CHUNK_SIZE*CHUNK_SCALE);
+    tscreen->draw(*m_TilesSPR[tindex]);
+
+}
+
+void Engine::drawTile(sf::RenderTarget *tscreen, int x, int y, unsigned int tindex)
+{
+    if(tindex >= int(m_TilesSPR.size()) )
+    {
+        std::cout << "drawTile : error, tile index out of bounds.  index=" << tindex << std::endl;
+        return;
+    }
+    else if(tindex)
+
+    m_TilesSPR[tindex]->setPosition(x*CHUNK_SIZE*CHUNK_SCALE, y*CHUNK_SIZE*CHUNK_SCALE);
+    tscreen->draw(*m_TilesSPR[tindex]);
+
 }
