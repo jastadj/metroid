@@ -2,7 +2,8 @@
 
 GUIobj::GUIobj()
 {
-
+    m_Visible = false;
+    m_Movable = false;
 }
 
 GUIobj::~GUIobj()
@@ -13,9 +14,9 @@ GUIobj::~GUIobj()
 //////////////////////////////////////////////////////
 // window pane
 
-WindowPane::WindowPane()
+WindowPane::WindowPane(sf::Vector2f panesize)
 {
-    panebox = sf::RectangleShape(sf::Vector2f(100,100));
+    panebox = sf::RectangleShape(panesize);
     panebox.setFillColor(sf::Color(0,200,50,128));
     panebox.setOutlineThickness(2);
     panebox.setOutlineColor(sf::Color(0,255,0));

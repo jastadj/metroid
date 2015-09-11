@@ -5,6 +5,9 @@ Engine::Engine()
     //init pointers
     m_Map = NULL;
 
+    //init vars
+    m_Mode = MODE_PLAY;
+
     //init screen
     std::cout << "Initializing render window...\n";
     m_Screen = new sf::RenderWindow(sf::VideoMode(CHUNK_SIZE*CHUNK_SCALE*SCREEN_WIDTH_CHUNKS,
@@ -62,8 +65,10 @@ bool Engine::initTiles()
 
 bool Engine::initGUIobjs()
 {
-    GUIobj *newobj = new WindowPane;
-    newobj->setPosition(32,32);
+    GUIobj *newobj = new WindowPane(sf::Vector2f(CHUNK_SIZE*CHUNK_SCALE*SCREEN_WIDTH_CHUNKS,
+                                                CHUNK_SIZE*CHUNK_SCALE*4));
+    newobj->setVisible(true);
+    newobj->setMovable(true);
     m_GUIobjs.push_back(newobj);
 
     return true;
@@ -93,7 +98,8 @@ void Engine::mainLoop()
         //update gui objects being manipulated
         if(guiselector != NULL)
         {
-            guiselector->setPosition( mousePos - guiselector->m_ClickedOffset + sf::Vector2f(2,2));
+            if(guiselector->movable())
+                guiselector->setPosition( mousePos - guiselector->m_ClickedOffset + sf::Vector2f(2,2));
 
             //if left mouse is no longer being held down, deselect gui obj
             if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)) guiselector = NULL;
@@ -111,6 +117,7 @@ void Engine::mainLoop()
                 else if(event.key.code == sf::Keyboard::S) viewcenter.y += CHUNK_SIZE*CHUNK_SCALE;
                 else if(event.key.code == sf::Keyboard::A) viewcenter.x -= CHUNK_SIZE*CHUNK_SCALE;
                 else if(event.key.code == sf::Keyboard::D) viewcenter.x += CHUNK_SIZE*CHUNK_SCALE;
+                else if(event.key.code == sf::Keyboard::F1) m_GUIobjs[0]->setVisible( !m_GUIobjs[0]->visible());
             }
             else if(event.type == sf::Event::MouseButtonPressed)
             {
@@ -119,16 +126,19 @@ void Engine::mainLoop()
                     //check for gui objs if mouse clicked on
                     for(int i = 0; i < int(m_GUIobjs.size()); i++)
                     {
-                        if( m_GUIobjs[i]->mouseOver(mousePos)) guiselector = m_GUIobjs[i];
+                        if(!m_GUIobjs[i]->visible()) continue;
+                        if( m_GUIobjs[i]->mouseOver(mousePos))
+                        {
+                            guiselector = m_GUIobjs[i];
 
-                        guiselector->m_ClickedOffset = mousePos - sf::Vector2f(guiselector->getRect().left,
+                            guiselector->m_ClickedOffset = mousePos - sf::Vector2f(guiselector->getRect().left,
                                                                    guiselector->getRect().top);
-
-                        break;
+                            break;
+                        }
                     }
                 }
-            }
-        }
+            }//end mouse button event
+        }//end event handling
 
         drawMap();
 
@@ -137,6 +147,7 @@ void Engine::mainLoop()
 
         for(int i = 0; i < int(m_GUIobjs.size()); i++)
         {
+            if( !m_GUIobjs[i]->visible() ) continue;
             m_GUIobjs[i]->update(mousePos);
             m_GUIobjs[i]->draw(m_Screen);
         }

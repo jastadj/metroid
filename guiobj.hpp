@@ -9,6 +9,9 @@ protected:
 
     sf::Vector2f m_Pos;
 
+    bool m_Visible;
+    bool m_Movable;
+
 public:
     GUIobj();
     virtual ~GUIobj();
@@ -24,6 +27,11 @@ public:
 
     virtual sf::FloatRect getRect()=0;
     virtual bool mouseOver(sf::Vector2f mousepos)=0;
+
+    void setVisible(bool nvis) { m_Visible = nvis;}
+    void setMovable(bool nmove) { m_Movable = nmove;}
+    bool visible() { return m_Visible;}
+    bool movable() { return m_Movable;}
 };
 
 class WindowPane: public GUIobj
@@ -33,7 +41,7 @@ private:
     sf::RectangleShape panebox;
 
 public:
-    WindowPane();
+    WindowPane(sf::Vector2f panesize);
     ~WindowPane();
 
     void draw(sf::RenderTarget *rtarget);

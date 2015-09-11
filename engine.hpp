@@ -16,12 +16,15 @@
 #define SCREEN_HEIGHT_CHUNKS 15*2
 
 //metroid map 960x900
+enum {MODE_PLAY, MODE_EDIT, MODE_TOTAL};
 
 class Engine
 {
 private:
 
     sf::RenderWindow *m_Screen;
+
+    int m_Mode;
 
     //init
     bool initTiles();
