@@ -71,6 +71,12 @@ bool Engine::initGUIobjs()
     newobj->setMovable(true);
     m_GUIobjs.push_back(newobj);
 
+    newobj = new SpriteButton(m_TilesSPR[2]);
+    newobj->setVisible(true);
+    newobj->setPosition(90,90);
+    newobj->setFunctionPtr( &testfunct);
+    m_GUIobjs.push_back(newobj);
+
     return true;
 }
 
@@ -102,7 +108,15 @@ void Engine::mainLoop()
                 guiselector->setPosition( mousePos - guiselector->m_ClickedOffset + sf::Vector2f(2,2));
 
             //if left mouse is no longer being held down, deselect gui obj
-            if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)) guiselector = NULL;
+            if(!sf::Mouse::isButtonPressed(sf::Mouse::Left))
+            {
+                //if mouse released over gui obj (assume clicked , ie button)
+                if(guiselector->mouseOver(mousePos))
+                {
+                    guiselector->doClicked();
+                }
+                guiselector = NULL;
+            }
         }
 
 
@@ -236,3 +250,9 @@ bool Engine::loadMap(std::string mapfile)
     return true;
 }
 
+///////////////////////
+// debug
+void Engine::testfunct()
+{
+    exit(0);
+}

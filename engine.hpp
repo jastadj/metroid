@@ -52,6 +52,9 @@ private:
     //map functions
     bool loadMap(std::string mapfile);
 
+    //test
+    void testfunct();
+
 public:
     Engine();
     ~Engine();

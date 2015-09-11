@@ -9,6 +9,8 @@ protected:
 
     sf::Vector2f m_Pos;
 
+    void (*functionPtr)();
+
     bool m_Visible;
     bool m_Movable;
 
@@ -21,17 +23,21 @@ public:
     virtual void draw(sf::RenderTarget *rtarget)=0;
     virtual void update(sf::Vector2f mousePos)=0;
 
+    void setFunctionPtr( void(*fptr)() ) {functionPtr = fptr;}
+
     const sf::Vector2f getPosition() const {return m_Pos;}
     void setPosition(sf::Vector2f newpos) { m_Pos = newpos;}
     void setPosition(int x, int y) { setPosition(sf::Vector2f(x,y));}
 
     virtual sf::FloatRect getRect()=0;
     virtual bool mouseOver(sf::Vector2f mousepos)=0;
+    virtual void doClicked() {};
 
     void setVisible(bool nvis) { m_Visible = nvis;}
     void setMovable(bool nmove) { m_Movable = nmove;}
     bool visible() { return m_Visible;}
     bool movable() { return m_Movable;}
+
 };
 
 class WindowPane: public GUIobj
@@ -50,4 +56,25 @@ public:
     sf::FloatRect getRect();
     bool mouseOver(sf::Vector2f mousepos);
 };
+
+class SpriteButton: public GUIobj
+{
+private:
+
+    sf::Sprite *m_Sprite;
+
+public:
+    SpriteButton(sf::Sprite *tsprite);
+    ~SpriteButton();
+
+    void draw(sf::RenderTarget *rtarget);
+    void update(sf::Vector2f mousePos);
+
+    sf::FloatRect getRect();
+    bool mouseOver(sf::Vector2f mousepos);
+
+    void doClicked();
+
+};
+
 #endif // CLASS_GUIOBJ
