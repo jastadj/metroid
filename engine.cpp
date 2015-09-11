@@ -63,13 +63,16 @@ void Engine::mainLoop()
 {
     bool quit = false;
 
+    //create viewport
     sf::View view;
-    view.setCenter(0,0);
-
-    m_Screen->setView(view);
+    sf::Vector2f viewcenter;
+    view.setSize(CHUNK_SIZE*CHUNK_SCALE*SCREEN_WIDTH_CHUNKS, CHUNK_SIZE*CHUNK_SCALE*SCREEN_HEIGHT_CHUNKS);
 
     while(!quit)
     {
+        view.setCenter(viewcenter);
+        m_Screen->setView(view);
+
         m_Screen->clear();
 
         sf::Event event;
@@ -80,6 +83,11 @@ void Engine::mainLoop()
             else if(event.type == sf::Event::KeyPressed)
             {
                 if(event.key.code == sf::Keyboard::Escape) quit = true;
+                else if(event.key.code == sf::Keyboard::W) viewcenter.y -= CHUNK_SIZE*CHUNK_SCALE;
+                else if(event.key.code == sf::Keyboard::S) viewcenter.y += CHUNK_SIZE*CHUNK_SCALE;
+                else if(event.key.code == sf::Keyboard::A) viewcenter.x -= CHUNK_SIZE*CHUNK_SCALE;
+                else if(event.key.code == sf::Keyboard::D) viewcenter.x += CHUNK_SIZE*CHUNK_SCALE;
+
             }
         }
 
@@ -168,3 +176,4 @@ bool Engine::loadMap(std::string mapfile)
     std::cout << "Loaded map from file " << mapfile << " successfully.\n";
     return true;
 }
+
