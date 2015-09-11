@@ -2,12 +2,18 @@
 
 Engine::Engine()
 {
+    //init pointers
+    m_Map = NULL;
 
     //init screen
+    std::cout << "Initializing render window...\n";
     m_Screen = new sf::RenderWindow(sf::VideoMode(CHUNK_SIZE*CHUNK_SCALE*SCREEN_WIDTH_CHUNKS,
                                                 CHUNK_SIZE*CHUNK_SCALE*SCREEN_HEIGHT_CHUNKS,32), "Metroid");
     initTiles();
 
+    loadMap("map.dat");
+
+    std::cout << "Starting main loop...\n";
     mainLoop();
 }
 
@@ -18,6 +24,8 @@ Engine::~Engine()
 
 bool Engine::initTiles()
 {
+    std::cout << "Initializing tiles...\n";
+
     //load in texture sprite sheet
     if(!m_TilesTXT.loadFromFile("tiles.png"))
     {
@@ -47,12 +55,18 @@ bool Engine::initTiles()
         }
     }
 
+    std::cout << "Loaded " << m_TilesSPR.size() << " tiles successfully.\n";
     return true;
 }
 
 void Engine::mainLoop()
 {
     bool quit = false;
+
+    sf::View view;
+    view.setCenter(0,0);
+
+    m_Screen->setView(view);
 
     while(!quit)
     {
@@ -69,7 +83,7 @@ void Engine::mainLoop()
             }
         }
 
-        drawSuperTile(m_Screen, 1, 1, 14);
+        drawMap();
 
         m_Screen->display();
     }
@@ -77,6 +91,9 @@ void Engine::mainLoop()
 
 void Engine::drawTile(sf::RenderTarget *tscreen, int x, int y, unsigned int tindex)
 {
+    //if tile == -1, treat as a blank tile and ignore
+    if(tindex == -1) return;
+
     if(tindex >= unsigned(m_TilesSPR.size()) )
     {
         std::cout << "drawTile : error, tile index out of bounds.  index=" << tindex << std::endl;
@@ -110,4 +127,44 @@ void Engine::drawSuperTile(sf::RenderTarget *tscreen, int x, int y, unsigned int
     //bottom right sprite
     drawTile(tscreen, x+1, y+1, tindex+m_TilesDim.x+1);
 
+}
+
+void Engine::drawMap()
+{
+    if(m_Map == NULL)
+    {
+        std::cout << "Error drawing map.  No valid map loaded!\n";
+        return;
+    }
+
+    for(int i = 0; i < m_Map->getMapDims().y; i++)
+    {
+        for(int n = 0; n < m_Map->getMapDims().x; n++)
+        {
+            drawTile(m_Screen, n, i, m_Map->getTileAt(n,i));
+        }
+    }
+}
+
+bool Engine::loadMap(std::string mapfile)
+{
+    std::cout << "Loading map from file : " << mapfile << std::endl;
+
+    if(m_Map != NULL)
+    {
+        std::cout << "Deleting current map...\n";
+        delete m_Map;
+    }
+    m_Map = new Map;
+    if(!m_Map->loadMapFile(mapfile))
+    {
+        std::cout << "Deleting map.\n";
+        delete m_Map;
+        std::cout << "Setting map to NULL.\n";
+        m_Map = NULL;
+        return false;
+    }
+
+    std::cout << "Loaded map from file " << mapfile << " successfully.\n";
+    return true;
 }

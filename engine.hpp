@@ -7,6 +7,8 @@
 #include <vector>
 #include <SFML\Graphics.hpp>
 
+#include "map.hpp"
+
 #define CHUNK_SIZE 8
 #define CHUNK_SCALE 2
 #define SCREEN_WIDTH_CHUNKS 16*2
@@ -34,6 +36,15 @@ private:
 
     //loop
     void mainLoop();
+
+    //game objects
+    Map *m_Map;
+
+    //draw functions
+    void drawMap();
+
+    //map functions
+    bool loadMap(std::string mapfile);
 
 public:
     Engine();
