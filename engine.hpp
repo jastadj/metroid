@@ -8,6 +8,7 @@
 #include <SFML\Graphics.hpp>
 
 #include "map.hpp"
+#include "guiobj.hpp"
 
 #define CHUNK_SIZE 8
 #define CHUNK_SCALE 2
@@ -24,6 +25,7 @@ private:
 
     //init
     bool initTiles();
+    bool initGUIobjs();
 
     //resources
     sf::Texture m_TilesTXT;
@@ -39,6 +41,7 @@ private:
 
     //game objects
     Map *m_Map;
+    std::vector< GUIobj*> m_GUIobjs;
 
     //draw functions
     void drawMap();

@@ -1,5 +1,4 @@
 #include "engine.hpp"
-#include "guiobj.hpp"
 
 Engine::Engine()
 {
@@ -11,6 +10,7 @@ Engine::Engine()
     m_Screen = new sf::RenderWindow(sf::VideoMode(CHUNK_SIZE*CHUNK_SCALE*SCREEN_WIDTH_CHUNKS,
                                                 CHUNK_SIZE*CHUNK_SCALE*SCREEN_HEIGHT_CHUNKS,32), "Metroid");
     initTiles();
+    initGUIobjs();
 
     loadMap("map.dat");
 
@@ -60,6 +60,15 @@ bool Engine::initTiles()
     return true;
 }
 
+bool Engine::initGUIobjs()
+{
+    GUIobj *newobj = new WindowPane;
+    newobj->setPosition(32,32);
+    m_GUIobjs.push_back(newobj);
+
+    return true;
+}
+
 void Engine::mainLoop()
 {
     bool quit = false;
@@ -69,10 +78,7 @@ void Engine::mainLoop()
     sf::Vector2f viewcenter(16*CHUNK_SIZE*CHUNK_SCALE, 15*CHUNK_SIZE*CHUNK_SCALE);
     view.setSize(CHUNK_SIZE*CHUNK_SCALE*SCREEN_WIDTH_CHUNKS, CHUNK_SIZE*CHUNK_SCALE*SCREEN_HEIGHT_CHUNKS);
 
-    //debug
-    WindowPane mypane;
-    mypane.setPosition(32,32);
-
+    GUIobj *guiselector = NULL;
 
     while(!quit)
     {
@@ -82,6 +88,17 @@ void Engine::mainLoop()
         m_Screen->clear();
 
         sf::Event event;
+        sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(*m_Screen));
+
+        //update gui objects being manipulated
+        if(guiselector != NULL)
+        {
+            guiselector->setPosition( mousePos - guiselector->m_ClickedOffset + sf::Vector2f(2,2));
+
+            //if left mouse is no longer being held down, deselect gui obj
+            if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)) guiselector = NULL;
+        }
+
 
         while(m_Screen->pollEvent(event) )
         {
@@ -94,7 +111,22 @@ void Engine::mainLoop()
                 else if(event.key.code == sf::Keyboard::S) viewcenter.y += CHUNK_SIZE*CHUNK_SCALE;
                 else if(event.key.code == sf::Keyboard::A) viewcenter.x -= CHUNK_SIZE*CHUNK_SCALE;
                 else if(event.key.code == sf::Keyboard::D) viewcenter.x += CHUNK_SIZE*CHUNK_SCALE;
+            }
+            else if(event.type == sf::Event::MouseButtonPressed)
+            {
+                if(event.mouseButton.button == sf::Mouse::Left)
+                {
+                    //check for gui objs if mouse clicked on
+                    for(int i = 0; i < int(m_GUIobjs.size()); i++)
+                    {
+                        if( m_GUIobjs[i]->mouseOver(mousePos)) guiselector = m_GUIobjs[i];
 
+                        guiselector->m_ClickedOffset = mousePos - sf::Vector2f(guiselector->getRect().left,
+                                                                   guiselector->getRect().top);
+
+                        break;
+                    }
+                }
             }
         }
 
@@ -102,8 +134,12 @@ void Engine::mainLoop()
 
         //draw ui
         m_Screen->setView(m_Screen->getDefaultView());
-        mypane.update();
-        mypane.draw(m_Screen);
+
+        for(int i = 0; i < int(m_GUIobjs.size()); i++)
+        {
+            m_GUIobjs[i]->update(mousePos);
+            m_GUIobjs[i]->draw(m_Screen);
+        }
 
         m_Screen->display();
     }

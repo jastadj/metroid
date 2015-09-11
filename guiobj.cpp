@@ -32,7 +32,18 @@ void WindowPane::draw(sf::RenderTarget *rtarget)
     rtarget->draw(panebox);
 }
 
-void WindowPane::update()
+void WindowPane::update(sf::Vector2f mousePos)
 {
     panebox.setPosition(m_Pos);
+}
+
+sf::FloatRect WindowPane::getRect()
+{
+    return panebox.getGlobalBounds();
+}
+
+bool WindowPane::mouseOver(sf::Vector2f mousepos)
+{
+    if(panebox.getGlobalBounds().contains(mousepos)) return true;
+    else return false;
 }
