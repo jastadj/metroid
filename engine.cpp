@@ -1,4 +1,5 @@
 #include "engine.hpp"
+#include "guiobj.hpp"
 
 Engine::Engine()
 {
@@ -68,6 +69,11 @@ void Engine::mainLoop()
     sf::Vector2f viewcenter(16*CHUNK_SIZE*CHUNK_SCALE, 15*CHUNK_SIZE*CHUNK_SCALE);
     view.setSize(CHUNK_SIZE*CHUNK_SCALE*SCREEN_WIDTH_CHUNKS, CHUNK_SIZE*CHUNK_SCALE*SCREEN_HEIGHT_CHUNKS);
 
+    //debug
+    WindowPane mypane;
+    mypane.setPosition(32,32);
+
+
     while(!quit)
     {
         view.setCenter(viewcenter);
@@ -93,6 +99,11 @@ void Engine::mainLoop()
         }
 
         drawMap();
+
+        //draw ui
+        m_Screen->setView(m_Screen->getDefaultView());
+        mypane.update();
+        mypane.draw(m_Screen);
 
         m_Screen->display();
     }
