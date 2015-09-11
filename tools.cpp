@@ -7,8 +7,8 @@ std::vector<std::string> csvParse(std::string pstring, char delim)
     //don't use " as delimiter, bad things will happen, detect this and return a blank list
     if(delim == '"') return parsedStrings;
 
-    size_t lpos = 0; //last position
-    size_t qpos = 0; //quote position
+    //size_t lpos = 0; //last position
+    //size_t qpos = 0; //quote position
 
     bool inquotes = false;
     std::string currentstring;
@@ -23,7 +23,7 @@ std::vector<std::string> csvParse(std::string pstring, char delim)
 
             currentstring = "";
 
-            lpos = i;
+            //lpos = i;
         }
         //are we at the end of the string?
         else if(i == int(pstring.length()-1))

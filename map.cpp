@@ -74,7 +74,7 @@ bool Map::loadMapFile(std::string filename)
 
 const int Map::getTileAt(int x, int y)
 {
-    if(x < 0 || y < 0 || x >= m_MapDim.x || y >= m_MapDim.y)
+    if(x < 0 || y < 0 || x >= int(m_MapDim.x) || y >= int(m_MapDim.y) )
     {
         std::cout << "Error getting tile at " << x << "," << y << ".  Out of map data bounds!  Returning -1 tile\n";
         return -1;

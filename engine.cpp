@@ -65,7 +65,7 @@ void Engine::mainLoop()
 
     //create viewport
     sf::View view;
-    sf::Vector2f viewcenter;
+    sf::Vector2f viewcenter(16*CHUNK_SIZE*CHUNK_SCALE, 15*CHUNK_SIZE*CHUNK_SCALE);
     view.setSize(CHUNK_SIZE*CHUNK_SCALE*SCREEN_WIDTH_CHUNKS, CHUNK_SIZE*CHUNK_SCALE*SCREEN_HEIGHT_CHUNKS);
 
     while(!quit)
@@ -83,6 +83,7 @@ void Engine::mainLoop()
             else if(event.type == sf::Event::KeyPressed)
             {
                 if(event.key.code == sf::Keyboard::Escape) quit = true;
+                //move viewport around
                 else if(event.key.code == sf::Keyboard::W) viewcenter.y -= CHUNK_SIZE*CHUNK_SCALE;
                 else if(event.key.code == sf::Keyboard::S) viewcenter.y += CHUNK_SIZE*CHUNK_SCALE;
                 else if(event.key.code == sf::Keyboard::A) viewcenter.x -= CHUNK_SIZE*CHUNK_SCALE;
@@ -100,7 +101,7 @@ void Engine::mainLoop()
 void Engine::drawTile(sf::RenderTarget *tscreen, int x, int y, unsigned int tindex)
 {
     //if tile == -1, treat as a blank tile and ignore
-    if(tindex == -1) return;
+    if(int(tindex) == -1) return;
 
     if(tindex >= unsigned(m_TilesSPR.size()) )
     {
@@ -145,9 +146,9 @@ void Engine::drawMap()
         return;
     }
 
-    for(int i = 0; i < m_Map->getMapDims().y; i++)
+    for(int i = 0; i < int(m_Map->getMapDims().y); i++)
     {
-        for(int n = 0; n < m_Map->getMapDims().x; n++)
+        for(int n = 0; n < int(m_Map->getMapDims().x); n++)
         {
             drawTile(m_Screen, n, i, m_Map->getTileAt(n,i));
         }
