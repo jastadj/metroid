@@ -9,8 +9,6 @@ protected:
 
     sf::Vector2f m_Pos;
 
-    void (*functionPtr)();
-
     bool m_Visible;
     bool m_Movable;
 
@@ -22,8 +20,6 @@ public:
 
     virtual void draw(sf::RenderTarget *rtarget)=0;
     virtual void update(sf::Vector2f mousePos)=0;
-
-    void setFunctionPtr( void(*fptr)() ) {functionPtr = fptr;}
 
     const sf::Vector2f getPosition() const {return m_Pos;}
     void setPosition(sf::Vector2f newpos) { m_Pos = newpos;}

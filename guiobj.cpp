@@ -6,7 +6,6 @@ GUIobj::GUIobj()
     m_Visible = false;
     m_Movable = false;
 
-    functionPtr = NULL;
 }
 
 GUIobj::~GUIobj()
@@ -93,5 +92,5 @@ bool SpriteButton::mouseOver(sf::Vector2f mousepos)
 
 void SpriteButton::doClicked()
 {
-    functionPtr();
+
 }

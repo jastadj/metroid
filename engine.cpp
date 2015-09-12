@@ -74,7 +74,6 @@ bool Engine::initGUIobjs()
     newobj = new SpriteButton(m_TilesSPR[2]);
     newobj->setVisible(true);
     newobj->setPosition(90,90);
-    newobj->setFunctionPtr( &testfunct);
     m_GUIobjs.push_back(newobj);
 
     return true;
@@ -254,5 +253,5 @@ bool Engine::loadMap(std::string mapfile)
 // debug
 void Engine::testfunct()
 {
-    exit(0);
+    std::cout << "Test functioned executed...\n";
 }
