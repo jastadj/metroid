@@ -148,9 +148,19 @@ void Engine::mainLoop()
                     m_Map->resizeToContainCoord(mcoord.x+1, mcoord.y+1);
                     m_Map->setTileAt(mcoord.x+1, mcoord.y+1, spritepaintertest+m_TilesDim.x+1);
                 }
+                if(spritepaintertest == -1)
+                {
+                    m_Map->setTileAt(mcoord.x, mcoord.y, -1);
+                    m_Map->setTileAt(mcoord.x+1, mcoord.y, -1);
+                    m_Map->setTileAt(mcoord.x, mcoord.y+1, -1);
+                    m_Map->setTileAt(mcoord.x+1, mcoord.y+1, -1);
+                }
+                else
+                {
+                    m_Map->setTileAt(mcoord.x+1, mcoord.y, spritepaintertest+1);
+                    m_Map->setTileAt(mcoord.x, mcoord.y+1, spritepaintertest+m_TilesDim.x);
+                }
 
-                m_Map->setTileAt(mcoord.x+1, mcoord.y, spritepaintertest+1);
-                m_Map->setTileAt(mcoord.x, mcoord.y+1, spritepaintertest+m_TilesDim.x);
 
             }
         }
@@ -172,6 +182,13 @@ void Engine::mainLoop()
                     if(m_Mode == MODE_PLAY) m_Mode = MODE_EDIT;
                     else if(m_Mode == MODE_EDIT) m_Mode = MODE_PLAY;
                     //m_GUIobjs[0]->setVisible( !m_GUIobjs[0]->visible());
+                }
+                else if(event.key.code == sf::Keyboard::Space)
+                {
+                    if(m_Mode == MODE_EDIT)
+                    {
+                        spritepaintersupertile = !spritepaintersupertile;
+                    }
                 }
             }
             else if(event.type == sf::Event::MouseButtonPressed)
@@ -209,9 +226,18 @@ void Engine::mainLoop()
                                 m_Map->resizeToContainCoord(mcoord.x+1, mcoord.y+1);
                                 m_Map->setTileAt(mcoord.x+1, mcoord.y+1, spritepaintertest+m_TilesDim.x+1);
                             }
-
-                            m_Map->setTileAt(mcoord.x+1, mcoord.y, spritepaintertest+1);
-                            m_Map->setTileAt(mcoord.x, mcoord.y+1, spritepaintertest+m_TilesDim.x);
+                            if(spritepaintertest == -1)
+                            {
+                                m_Map->setTileAt(mcoord.x, mcoord.y, -1);
+                                m_Map->setTileAt(mcoord.x+1, mcoord.y, -1);
+                                m_Map->setTileAt(mcoord.x, mcoord.y+1, -1);
+                                m_Map->setTileAt(mcoord.x+1, mcoord.y+1, -1);
+                            }
+                            else
+                            {
+                                m_Map->setTileAt(mcoord.x+1, mcoord.y, spritepaintertest+1);
+                                m_Map->setTileAt(mcoord.x, mcoord.y+1, spritepaintertest+m_TilesDim.x);
+                            }
 
                         }
                     }
