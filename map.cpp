@@ -5,8 +5,10 @@
 
 Map::Map()
 {
-
-
+    m_MapData.resize(1);
+    m_MapData[0].push_back(-1);
+    m_MapDim.x = 1;
+    m_MapDim.y = 1;
 }
 
 Map::~Map()
@@ -24,6 +26,9 @@ bool Map::loadMapFile(std::string filename)
         std::cout << "Map::loadMapFile error, unable to open map file :" << filename << std::endl;
         return false;
     }
+
+    for(int i = 0; i < int(m_MapData.size()); i++) m_MapData[i].clear();
+    m_MapData.clear();
 
     //vars to store expected map data width
     int datawidth = -1;
@@ -103,6 +108,15 @@ bool Map::resizeToContainCoord(int x, int y)
 
     //dont handle negative number shift for now....
     if(x < 0 || y < 0) return false;
+
+    //if map data is empty
+    if(m_MapData.empty())
+    {
+        m_MapData.resize(1);
+        m_MapData[0].push_back(-1);
+        m_MapDim.x = 1;
+        m_MapDim.y = 1;
+    }
 
     //resize width
     if( unsigned(x) >= m_MapDim.x)
