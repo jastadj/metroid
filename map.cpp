@@ -159,6 +159,9 @@ bool Map::resizeToContainCoord(int x, int y)
             {
                 for(int n = 0; n <= abs(x); n++) m_MapData[i].insert(m_MapData[i].begin(), -1);
             }
+
+            //set x at 0 now
+            x = 0;
         }
 
         if(y < 0)
@@ -170,6 +173,8 @@ bool Map::resizeToContainCoord(int x, int y)
 
             for(int i = 0; i <= abs(y); i++) m_MapData.insert(m_MapData.begin(), tempdata);
 
+            //set y at 0 now
+            y = 0;
         }
 
     }
