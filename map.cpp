@@ -82,3 +82,65 @@ const int Map::getTileAt(int x, int y)
 
     else return m_MapData[y][x];
 }
+
+bool Map::setTileAt(int x, int y, int tileindex)
+{
+    if(x < 0 || y < 0 || x >= int(m_MapDim.x) || y >= int(m_MapDim.y) )
+    {
+        std::cout << "Map setTileAt error : coords " << x << "," << y << " are out of map bounds ("
+        << m_MapDim.x << "," << m_MapDim.y << ")\n";
+        return false;
+    }
+
+    m_MapData[y][x] = tileindex;
+
+    return true;
+}
+
+bool Map::resizeToContainCoord(int x, int y)
+{
+    std::cout << "Resizing map to contain coord " << x << "," << y << "...\n";
+
+    //dont handle negative number shift for now....
+    if(x < 0 || y < 0) return false;
+
+    //resize width
+    if( unsigned(x) >= m_MapDim.x)
+    {
+        unsigned int oldwidth = m_MapDim.x;
+        m_MapDim.x = unsigned(x)+1;
+        //resize array
+        for(int i = 0; i < int(m_MapData.size()); i++) m_MapData[i].resize(x+1);
+
+        for(int i = 0; i < int(m_MapData.size()); i++)
+            for(int n = 0; n < int(m_MapData[i].size()); n++)
+        {
+            if( n >= oldwidth) m_MapData[i][n] = -1;
+        }
+    }
+
+    //resize height
+    if( unsigned(y) > m_MapDim.y)
+    {
+        unsigned int oldheight = m_MapDim.y;
+
+        m_MapDim.y = unsigned(y)+1;
+
+        //resize array height
+        m_MapData.resize(m_MapDim.y);
+        //resize array width for new height lines
+        for(int i = 0; i < int(m_MapData.size()); i++)
+        {
+            m_MapData[i].resize(m_MapDim.x);
+
+            if(i >= oldheight) for(int n = 0; n < int(m_MapData[i].size()); n++) m_MapData[i][n] = -1;
+        }
+
+    }
+
+    std::cout << "Map dimensions are " << m_MapDim.x << "," << m_MapDim.y << std::endl;
+    std::cout << "Map data array dimensions are " << m_MapData[0].size() << "," << m_MapData.size()-1 << std::endl;
+
+    return true;
+
+}

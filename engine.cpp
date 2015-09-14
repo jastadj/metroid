@@ -90,7 +90,6 @@ void Engine::mainLoop()
 
     GUIobj *guiselector = NULL;
     int spritepaintertest = 0;
-    sf::Sprite *spritepaintertestspr = NULL;
 
     while(!quit)
     {
@@ -146,6 +145,20 @@ void Engine::mainLoop()
                     //debug
                     sf::Vector2i mcoord = mouseToMapCoords(&mousePos);
                     std::cout << "Mouse clicked on coord : " << mcoord.x << "," << mcoord.y << std::endl;
+
+                    //if in editor mode...
+                    if(m_Mode == MODE_EDIT)
+                    {
+                        //if unable to set tile at coordinate, resize map to contain coordinate
+                        if(!m_Map->setTileAt(mcoord.x, mcoord.y, spritepaintertest))
+                        {
+                            std::cout << "Attempting to resize map dimensions...\n";
+                            m_Map->resizeToContainCoord(mcoord.x, mcoord.y);
+                            m_Map->setTileAt(mcoord.x, mcoord.y, spritepaintertest);
+                        }
+                    }
+                    //RETURN TO MAKE GUI MANIPULATION DEAD CODE FOR NOW
+                    else continue;
 
                     //check for gui objs if mouse clicked on
                     for(int i = 0; i < int(m_GUIobjs.size()); i++)
