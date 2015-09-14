@@ -90,6 +90,8 @@ void Engine::mainLoop()
 
     GUIobj *guiselector = NULL;
     int spritepaintertest = 0;
+    bool spritepaintersupertile = true;
+    bool spritepaintersupertilesnap = true;
 
     while(!quit)
     {
@@ -116,6 +118,40 @@ void Engine::mainLoop()
                     guiselector->doClicked();
                 }
                 guiselector = NULL;
+            }
+        }
+        //if in edit mode and mouse is held down, paint
+        if(m_Mode == MODE_EDIT && sf::Mouse::isButtonPressed(sf::Mouse::Left))
+        {
+            sf::Vector2i mcoord = mouseToMapCoords(&mousePos);
+
+            //if grid snapping on for super tiles, fit to grid pos
+            if(spritepaintersupertile && spritepaintersupertilesnap)
+            {
+                if(mcoord.x%2) mcoord.x--;
+                if(mcoord.y%2) mcoord.y--;
+            }
+
+            if(!m_Map->setTileAt(mcoord.x, mcoord.y, spritepaintertest))
+            {
+                std::cout << "Attempting to resize map dimensions...\n";
+                m_Map->resizeToContainCoord(mcoord.x, mcoord.y);
+                m_Map->setTileAt(mcoord.x, mcoord.y, spritepaintertest);
+            }
+
+            if(spritepaintersupertile)
+            {
+                //if unable to set tile at coordinate, resize map to contain coordinate
+                if(!m_Map->setTileAt(mcoord.x+1, mcoord.y+1, spritepaintertest+m_TilesDim.x+1))
+                {
+                    std::cout << "Attempting to resize map dimensions...\n";
+                    m_Map->resizeToContainCoord(mcoord.x+1, mcoord.y+1);
+                    m_Map->setTileAt(mcoord.x+1, mcoord.y+1, spritepaintertest+m_TilesDim.x+1);
+                }
+
+                m_Map->setTileAt(mcoord.x+1, mcoord.y, spritepaintertest+1);
+                m_Map->setTileAt(mcoord.x, mcoord.y+1, spritepaintertest+m_TilesDim.x);
+
             }
         }
 
@@ -149,12 +185,34 @@ void Engine::mainLoop()
                     //if in editor mode...
                     if(m_Mode == MODE_EDIT)
                     {
+                        //if grid snapping on for super tiles, fit to grid pos
+                        if(spritepaintersupertile && spritepaintersupertilesnap)
+                        {
+                            if(mcoord.x%2) mcoord.x--;
+                            if(mcoord.y%2) mcoord.y--;
+                        }
+
                         //if unable to set tile at coordinate, resize map to contain coordinate
                         if(!m_Map->setTileAt(mcoord.x, mcoord.y, spritepaintertest))
                         {
                             std::cout << "Attempting to resize map dimensions...\n";
                             m_Map->resizeToContainCoord(mcoord.x, mcoord.y);
                             m_Map->setTileAt(mcoord.x, mcoord.y, spritepaintertest);
+                        }
+
+                        if(spritepaintersupertile)
+                        {
+                            //if unable to set tile at coordinate, resize map to contain coordinate
+                            if(!m_Map->setTileAt(mcoord.x+1, mcoord.y+1, spritepaintertest+m_TilesDim.x+1))
+                            {
+                                std::cout << "Attempting to resize map dimensions...\n";
+                                m_Map->resizeToContainCoord(mcoord.x+1, mcoord.y+1);
+                                m_Map->setTileAt(mcoord.x+1, mcoord.y+1, spritepaintertest+m_TilesDim.x+1);
+                            }
+
+                            m_Map->setTileAt(mcoord.x+1, mcoord.y, spritepaintertest+1);
+                            m_Map->setTileAt(mcoord.x, mcoord.y+1, spritepaintertest+m_TilesDim.x);
+
                         }
                     }
                     //RETURN TO MAKE GUI MANIPULATION DEAD CODE FOR NOW
@@ -175,6 +233,51 @@ void Engine::mainLoop()
                     }
                 }
             }//end mouse button event
+            else if(event.type == sf::Event::MouseWheelMoved)
+            {
+                if(event.mouseWheel.delta > 0)
+                {
+                    if(m_Mode == MODE_EDIT)
+                    {
+                        if(spritepaintersupertile && spritepaintersupertilesnap)
+                        {
+                            spritepaintertest +=2;
+                            if(spritepaintertest%2)
+                            {
+                                spritepaintertest--;
+                            }
+                        }
+                        else spritepaintertest++;
+                        if(spritepaintertest >= int(m_TilesSPR.size()) )
+                        {
+                            spritepaintertest = -1;
+                        }
+                    }
+                }
+                if(event.mouseWheel.delta < 0)
+                {
+                    if(m_Mode == MODE_EDIT)
+                    {
+                        if(spritepaintersupertile && spritepaintersupertilesnap)
+                        {
+                            spritepaintertest -=2;
+                            if(spritepaintertest%2)
+                            {
+                                spritepaintertest--;
+                            }
+                            if(spritepaintertest == -2) spritepaintertest = -1;
+                        }
+                        else spritepaintertest--;
+                        if(spritepaintertest < -1 )
+                        {
+                            spritepaintertest = int(m_TilesSPR.size())-1;
+                        }
+                    }
+                }
+
+                //debug
+                std::cout << "spritepainter index = " << spritepaintertest << std::endl;
+            }
         }//end event handling
 
         drawMap();
@@ -186,8 +289,15 @@ void Engine::mainLoop()
         if(spritepaintertest >= 0 && spritepaintertest < int(m_TilesSPR.size()) && m_Mode == MODE_EDIT)
         {
             sf::Vector2i mtocoords = sf::Vector2i(mouseToMapCoords(&mousePos));
+
+            if(spritepaintersupertilesnap && spritepaintersupertile)
+            {
+                if(mtocoords.x%2) mtocoords.x--;
+                if(mtocoords.y%2) mtocoords.y--;
+            }
             //get map coord from mouse pos to snap to drawing pos
-            drawTile(m_Screen, mtocoords.x, mtocoords.y, spritepaintertest);
+            if(spritepaintersupertile) drawSuperTile(m_Screen, mtocoords.x, mtocoords.y, spritepaintertest);
+            else drawTile(m_Screen, mtocoords.x, mtocoords.y, spritepaintertest);
             //draw tile brush as mouse cursor
             //drawTileScreenCoord(m_Screen, mousePos, spritepaintertest);
         }
@@ -225,6 +335,21 @@ void Engine::drawTileScreenCoord(sf::RenderTarget *tscreen, sf::Vector2f screenc
 
 void Engine::drawSuperTile(sf::RenderTarget *tscreen, int x, int y, unsigned int tindex)
 {
+    //if trying to draw empty tile
+    if(int(tindex) == -2)
+    {
+        //top left sprite
+        drawTile(tscreen, x, y, -1);
+        //top right sprite
+        drawTile(tscreen, x+1, y, -1);
+        //bottom left sprite
+        drawTile(tscreen, x, y+1, -1);
+        //bottom right sprite
+        drawTile(tscreen, x+1, y+1, -1);
+
+        return;
+    }
+
     if(tindex >= unsigned(m_TilesSPR.size()) )
     {
         std::cout << "drawTile : error, tile index out of bounds.  index=" << tindex << std::endl;

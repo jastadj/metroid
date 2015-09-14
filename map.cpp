@@ -90,7 +90,7 @@ const int Map::getTileAt(int x, int y)
 
 bool Map::setTileAt(int x, int y, int tileindex)
 {
-    if(x < 0 || y < 0 || x >= int(m_MapDim.x) || y >= int(m_MapDim.y) )
+    if(x < -1 || y < -1 || x >= int(m_MapDim.x) || y >= int(m_MapDim.y) )
     {
         std::cout << "Map setTileAt error : coords " << x << "," << y << " are out of map bounds ("
         << m_MapDim.x << "," << m_MapDim.y << ")\n";
