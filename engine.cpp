@@ -89,7 +89,7 @@ void Engine::mainLoop()
     view.setSize(CHUNK_SIZE*CHUNK_SCALE*SCREEN_WIDTH_CHUNKS, CHUNK_SIZE*CHUNK_SCALE*SCREEN_HEIGHT_CHUNKS);
 
     GUIobj *guiselector = NULL;
-    int spritepaintertest = 0;
+    int spritepaintertest = 2;
     bool spritepaintersupertile = true;
     bool spritepaintersupertilesnap = true;
 
@@ -151,12 +151,12 @@ void Engine::mainLoop()
                     m_Map->resizeToContainCoord(mcoord.x+1, mcoord.y+1);
                     m_Map->setTileAt(mcoord.x+1, mcoord.y+1, spritepaintertest+m_TilesDim.x+1);
                 }
-                if(spritepaintertest == -1)
+                if(spritepaintertest == 0)
                 {
-                    m_Map->setTileAt(mcoord.x, mcoord.y, -1);
-                    m_Map->setTileAt(mcoord.x+1, mcoord.y, -1);
-                    m_Map->setTileAt(mcoord.x, mcoord.y+1, -1);
-                    m_Map->setTileAt(mcoord.x+1, mcoord.y+1, -1);
+                    m_Map->setTileAt(mcoord.x, mcoord.y, 0);
+                    m_Map->setTileAt(mcoord.x+1, mcoord.y, 0);
+                    m_Map->setTileAt(mcoord.x, mcoord.y+1, 0);
+                    m_Map->setTileAt(mcoord.x+1, mcoord.y+1, 0);
                 }
                 else
                 {
@@ -244,7 +244,7 @@ void Engine::mainLoop()
                         else spritepaintertest++;
                         if(spritepaintertest >= int(m_TilesSPR.size()) )
                         {
-                            spritepaintertest = -1;
+                            spritepaintertest = 0;
                         }
                     }
                 }
@@ -259,10 +259,10 @@ void Engine::mainLoop()
                             {
                                 spritepaintertest--;
                             }
-                            if(spritepaintertest == -2) spritepaintertest = -1;
+                            if(spritepaintertest == -2) spritepaintertest = 0;
                         }
                         else spritepaintertest--;
-                        if(spritepaintertest < -1 )
+                        if(spritepaintertest < 0 )
                         {
                             spritepaintertest = int(m_TilesSPR.size())-1;
                         }
@@ -314,8 +314,7 @@ void Engine::drawTile(sf::RenderTarget *tscreen, int x, int y, unsigned int tind
 
 void Engine::drawTileScreenCoord(sf::RenderTarget *tscreen, sf::Vector2f screencoords, unsigned int tindex)
 {
-    //if tile == -1, treat as a blank tile and ignore
-    if(int(tindex) == -1) return;
+    if(tindex == 0) return;
 
     if(tindex >= unsigned(m_TilesSPR.size()) )
     {
@@ -330,16 +329,16 @@ void Engine::drawTileScreenCoord(sf::RenderTarget *tscreen, sf::Vector2f screenc
 void Engine::drawSuperTile(sf::RenderTarget *tscreen, int x, int y, unsigned int tindex)
 {
     //if trying to draw empty tile
-    if(int(tindex) == -2)
+    if(int(tindex) == 0)
     {
         //top left sprite
-        drawTile(tscreen, x, y, -1);
+        drawTile(tscreen, x, y, 0);
         //top right sprite
-        drawTile(tscreen, x+1, y, -1);
+        drawTile(tscreen, x+1, y, 0);
         //bottom left sprite
-        drawTile(tscreen, x, y+1, -1);
+        drawTile(tscreen, x, y+1, 0);
         //bottom right sprite
-        drawTile(tscreen, x+1, y+1, -1);
+        drawTile(tscreen, x+1, y+1,0);
 
         return;
     }

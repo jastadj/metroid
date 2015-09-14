@@ -6,7 +6,7 @@
 Map::Map()
 {
     m_MapData.resize(1);
-    m_MapData[0].push_back(-1);
+    m_MapData[0].push_back(0);
     m_MapDim.x = 1;
     m_MapDim.y = 1;
 }
@@ -118,7 +118,7 @@ const int Map::getTileAt(int x, int y)
 
 bool Map::setTileAt(int x, int y, int tileindex)
 {
-    if(x < -1 || y < -1 || x >= int(m_MapDim.x) || y >= int(m_MapDim.y) )
+    if(x < 0 || y < 0 || x >= int(m_MapDim.x) || y >= int(m_MapDim.y) )
     {
         std::cout << "Map setTileAt error : coords " << x << "," << y << " are out of map bounds ("
         << m_MapDim.x << "," << m_MapDim.y << ")\n";
@@ -157,7 +157,7 @@ bool Map::resizeToContainCoord(int x, int y)
 
             for(int i = 0; i < int(m_MapData.size()); i++)
             {
-                for(int n = 0; n <= abs(x); n++) m_MapData[i].insert(m_MapData[i].begin(), -1);
+                for(int n = 0; n <= abs(x); n++) m_MapData[i].insert(m_MapData[i].begin(), 0);
             }
 
             //set x at 0 now
@@ -169,7 +169,7 @@ bool Map::resizeToContainCoord(int x, int y)
             m_MapDim.y += abs(y);
             std::vector<int> tempdata;
             tempdata.resize(m_MapDim.x);
-            for(int i = 0; i < int(tempdata.size()); i++) tempdata[i] = -1;
+            for(int i = 0; i < int(tempdata.size()); i++) tempdata[i] = 0;
 
             for(int i = 0; i <= abs(y); i++) m_MapData.insert(m_MapData.begin(), tempdata);
 
@@ -190,7 +190,7 @@ bool Map::resizeToContainCoord(int x, int y)
         for(int i = 0; i < int(m_MapData.size()); i++)
             for(int n = 0; n < int(m_MapData[i].size()); n++)
         {
-            if( n >= int(oldwidth) ) m_MapData[i][n] = -1;
+            if( n >= int(oldwidth) ) m_MapData[i][n] = 0;
         }
     }
 
@@ -208,7 +208,7 @@ bool Map::resizeToContainCoord(int x, int y)
         {
             m_MapData[i].resize(m_MapDim.x);
 
-            if(i >= int(oldheight)) for(int n = 0; n < int(m_MapData[i].size()); n++) m_MapData[i][n] = -1;
+            if(i >= int(oldheight)) for(int n = 0; n < int(m_MapData[i].size()); n++) m_MapData[i][n] = 0;
         }
 
     }
