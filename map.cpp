@@ -77,6 +77,34 @@ bool Map::loadMapFile(std::string filename)
     return true;
 }
 
+bool Map::saveMapFile(std::string filename)
+{
+    std::ofstream ofile;
+    ofile.open(filename.c_str());
+
+    if(!ofile.is_open())
+    {
+        std::cout << "Map::saveMapFile error, unable to open map file :" << filename << std::endl;
+        return false;
+    }
+
+    std::cout << "Saving map data..\n";
+
+    for(int i = 0; i < int(m_MapData.size()); i++)
+    {
+        for(int n = 0; n < int(m_MapData[i].size()); n++)
+        {
+            if(n == int(m_MapData[i].size()-1))
+                ofile << m_MapData[i][n] << std::endl;
+            else ofile << m_MapData[i][n] << ",";
+        }
+    }
+
+
+    ofile.close();
+    return true;
+}
+
 const int Map::getTileAt(int x, int y)
 {
     if(x < 0 || y < 0 || x >= int(m_MapDim.x) || y >= int(m_MapDim.y) )
@@ -129,7 +157,7 @@ bool Map::resizeToContainCoord(int x, int y)
         for(int i = 0; i < int(m_MapData.size()); i++)
             for(int n = 0; n < int(m_MapData[i].size()); n++)
         {
-            if( n >= oldwidth) m_MapData[i][n] = -1;
+            if( n >= int(oldwidth) ) m_MapData[i][n] = -1;
         }
     }
 
@@ -147,7 +175,7 @@ bool Map::resizeToContainCoord(int x, int y)
         {
             m_MapData[i].resize(m_MapDim.x);
 
-            if(i >= oldheight) for(int n = 0; n < int(m_MapData[i].size()); n++) m_MapData[i][n] = -1;
+            if(i >= int(oldheight)) for(int n = 0; n < int(m_MapData[i].size()); n++) m_MapData[i][n] = -1;
         }
 
     }

@@ -311,6 +311,9 @@ void Engine::mainLoop()
 
         m_Screen->display();
     }
+
+    //save map on quit
+    m_Map->saveMapFile("map.dat");
 }
 
 void Engine::drawTile(sf::RenderTarget *tscreen, int x, int y, unsigned int tindex)

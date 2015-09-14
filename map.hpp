@@ -20,6 +20,7 @@ public:
     ~Map();
 
     bool loadMapFile(std::string filename);
+    bool saveMapFile(std::string filename);
     const sf::Vector2u getMapDims() const {return m_MapDim;}
     const int getTileAt(int x, int y);
     bool setTileAt(int x, int y, int tileindex);
