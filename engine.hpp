@@ -37,6 +37,7 @@ private:
 
     //draw
     void drawTile(sf::RenderTarget *tscreen, int x, int y, unsigned int tindex); //draw tile in tile coordinates
+    void drawTileScreenCoord(sf::RenderTarget *tscreen, sf::Vector2f screencoords, unsigned int tindex); //draw tile at screen coordinates
     void drawSuperTile(sf::RenderTarget *tscreen, int x, int y, unsigned int tindex); // draw a 2x2 tile, using topleft tile as ref
 
     //loop
@@ -48,6 +49,7 @@ private:
 
     //draw functions
     void drawMap();
+    sf::Vector2i mouseToMapCoords(sf::Vector2f *mousepos);
 
     //map functions
     bool loadMap(std::string mapfile);

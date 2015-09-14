@@ -67,12 +67,12 @@ bool Engine::initGUIobjs()
 {
     GUIobj *newobj = new WindowPane(sf::Vector2f(CHUNK_SIZE*CHUNK_SCALE*SCREEN_WIDTH_CHUNKS,
                                                 CHUNK_SIZE*CHUNK_SCALE*4));
-    newobj->setVisible(true);
+    newobj->setVisible(false);
     newobj->setMovable(true);
     m_GUIobjs.push_back(newobj);
 
     newobj = new SpriteButton(m_TilesSPR[2]);
-    newobj->setVisible(true);
+    newobj->setVisible(false);
     newobj->setPosition(90,90);
     m_GUIobjs.push_back(newobj);
 
@@ -89,6 +89,8 @@ void Engine::mainLoop()
     view.setSize(CHUNK_SIZE*CHUNK_SCALE*SCREEN_WIDTH_CHUNKS, CHUNK_SIZE*CHUNK_SCALE*SCREEN_HEIGHT_CHUNKS);
 
     GUIobj *guiselector = NULL;
+    int spritepaintertest = 0;
+    sf::Sprite *spritepaintertestspr = NULL;
 
     while(!quit)
     {
@@ -130,12 +132,21 @@ void Engine::mainLoop()
                 else if(event.key.code == sf::Keyboard::S) viewcenter.y += CHUNK_SIZE*CHUNK_SCALE;
                 else if(event.key.code == sf::Keyboard::A) viewcenter.x -= CHUNK_SIZE*CHUNK_SCALE;
                 else if(event.key.code == sf::Keyboard::D) viewcenter.x += CHUNK_SIZE*CHUNK_SCALE;
-                else if(event.key.code == sf::Keyboard::F1) m_GUIobjs[0]->setVisible( !m_GUIobjs[0]->visible());
+                else if(event.key.code == sf::Keyboard::F1)
+                {
+                    if(m_Mode == MODE_PLAY) m_Mode = MODE_EDIT;
+                    else if(m_Mode == MODE_EDIT) m_Mode = MODE_PLAY;
+                    //m_GUIobjs[0]->setVisible( !m_GUIobjs[0]->visible());
+                }
             }
             else if(event.type == sf::Event::MouseButtonPressed)
             {
                 if(event.mouseButton.button == sf::Mouse::Left)
                 {
+                    //debug
+                    sf::Vector2i mcoord = mouseToMapCoords(&mousePos);
+                    std::cout << "Mouse clicked on coord : " << mcoord.x << "," << mcoord.y << std::endl;
+
                     //check for gui objs if mouse clicked on
                     for(int i = 0; i < int(m_GUIobjs.size()); i++)
                     {
@@ -158,6 +169,16 @@ void Engine::mainLoop()
         //draw ui
         m_Screen->setView(m_Screen->getDefaultView());
 
+        //draw mouse test painter
+        if(spritepaintertest >= 0 && spritepaintertest < int(m_TilesSPR.size()) && m_Mode == MODE_EDIT)
+        {
+            sf::Vector2i mtocoords = sf::Vector2i(mouseToMapCoords(&mousePos));
+            //get map coord from mouse pos to snap to drawing pos
+            drawTile(m_Screen, mtocoords.x, mtocoords.y, spritepaintertest);
+            //draw tile brush as mouse cursor
+            //drawTileScreenCoord(m_Screen, mousePos, spritepaintertest);
+        }
+
         for(int i = 0; i < int(m_GUIobjs.size()); i++)
         {
             if( !m_GUIobjs[i]->visible() ) continue;
@@ -171,18 +192,22 @@ void Engine::mainLoop()
 
 void Engine::drawTile(sf::RenderTarget *tscreen, int x, int y, unsigned int tindex)
 {
+    drawTileScreenCoord(tscreen, sf::Vector2f(x*CHUNK_SIZE*CHUNK_SCALE, y*CHUNK_SIZE*CHUNK_SCALE), tindex);
+}
+
+void Engine::drawTileScreenCoord(sf::RenderTarget *tscreen, sf::Vector2f screencoords, unsigned int tindex)
+{
     //if tile == -1, treat as a blank tile and ignore
     if(int(tindex) == -1) return;
 
     if(tindex >= unsigned(m_TilesSPR.size()) )
     {
-        std::cout << "drawTile : error, tile index out of bounds.  index=" << tindex << std::endl;
+        std::cout << "drawTileScreenCoord : error, tile index out of bounds.  index=" << tindex << std::endl;
         return;
     }
 
-    m_TilesSPR[tindex]->setPosition(x*CHUNK_SIZE*CHUNK_SCALE, y*CHUNK_SIZE*CHUNK_SCALE);
+    m_TilesSPR[tindex]->setPosition(screencoords);
     tscreen->draw(*m_TilesSPR[tindex]);
-
 }
 
 void Engine::drawSuperTile(sf::RenderTarget *tscreen, int x, int y, unsigned int tindex)
@@ -247,6 +272,15 @@ bool Engine::loadMap(std::string mapfile)
 
     std::cout << "Loaded map from file " << mapfile << " successfully.\n";
     return true;
+}
+
+sf::Vector2i Engine::mouseToMapCoords(sf::Vector2f *mousepos)
+{
+    sf::Vector2i mapcoord;
+    mapcoord.x = mousepos->x / (CHUNK_SIZE*CHUNK_SCALE);
+    mapcoord.y = mousepos->y / (CHUNK_SIZE*CHUNK_SCALE);
+
+    return mapcoord;
 }
 
 ///////////////////////
