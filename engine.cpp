@@ -101,7 +101,10 @@ void Engine::mainLoop()
         m_Screen->clear();
 
         sf::Event event;
-        sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(*m_Screen));
+        sf::Vector2i mousePosi = sf::Mouse::getPosition(*m_Screen);
+        sf::Vector2f mousePos = sf::Vector2f(mousePosi);
+
+
 
         //update gui objects being manipulated
         if(guiselector != NULL)
@@ -123,7 +126,7 @@ void Engine::mainLoop()
         //if in edit mode and mouse is held down, paint
         if(m_Mode == MODE_EDIT && sf::Mouse::isButtonPressed(sf::Mouse::Left))
         {
-            sf::Vector2i mcoord = mouseToMapCoords(&mousePos);
+            sf::Vector2i mcoord = screenToMapCoords(m_Screen->mapPixelToCoords(mousePosi));
 
             //if grid snapping on for super tiles, fit to grid pos
             if(spritepaintersupertile && spritepaintersupertilesnap)
@@ -183,6 +186,7 @@ void Engine::mainLoop()
                     else if(m_Mode == MODE_EDIT) m_Mode = MODE_PLAY;
                     //m_GUIobjs[0]->setVisible( !m_GUIobjs[0]->visible());
                 }
+                else if(event.key.code == sf::Keyboard::F5) m_Map->saveMapFile("map.dat");
                 else if(event.key.code == sf::Keyboard::Space)
                 {
                     if(m_Mode == MODE_EDIT)
@@ -196,50 +200,14 @@ void Engine::mainLoop()
                 if(event.mouseButton.button == sf::Mouse::Left)
                 {
                     //debug
-                    sf::Vector2i mcoord = mouseToMapCoords(&mousePos);
+                    sf::Vector2i mcoord = screenToMapCoords(m_Screen->mapPixelToCoords(mousePosi));
                     std::cout << "Mouse clicked on coord : " << mcoord.x << "," << mcoord.y << std::endl;
 
                     //if in editor mode...
                     if(m_Mode == MODE_EDIT)
                     {
-                        //if grid snapping on for super tiles, fit to grid pos
-                        if(spritepaintersupertile && spritepaintersupertilesnap)
-                        {
-                            if(mcoord.x%2) mcoord.x--;
-                            if(mcoord.y%2) mcoord.y--;
-                        }
 
-                        //if unable to set tile at coordinate, resize map to contain coordinate
-                        if(!m_Map->setTileAt(mcoord.x, mcoord.y, spritepaintertest))
-                        {
-                            std::cout << "Attempting to resize map dimensions...\n";
-                            m_Map->resizeToContainCoord(mcoord.x, mcoord.y);
-                            m_Map->setTileAt(mcoord.x, mcoord.y, spritepaintertest);
-                        }
 
-                        if(spritepaintersupertile)
-                        {
-                            //if unable to set tile at coordinate, resize map to contain coordinate
-                            if(!m_Map->setTileAt(mcoord.x+1, mcoord.y+1, spritepaintertest+m_TilesDim.x+1))
-                            {
-                                std::cout << "Attempting to resize map dimensions...\n";
-                                m_Map->resizeToContainCoord(mcoord.x+1, mcoord.y+1);
-                                m_Map->setTileAt(mcoord.x+1, mcoord.y+1, spritepaintertest+m_TilesDim.x+1);
-                            }
-                            if(spritepaintertest == -1)
-                            {
-                                m_Map->setTileAt(mcoord.x, mcoord.y, -1);
-                                m_Map->setTileAt(mcoord.x+1, mcoord.y, -1);
-                                m_Map->setTileAt(mcoord.x, mcoord.y+1, -1);
-                                m_Map->setTileAt(mcoord.x+1, mcoord.y+1, -1);
-                            }
-                            else
-                            {
-                                m_Map->setTileAt(mcoord.x+1, mcoord.y, spritepaintertest+1);
-                                m_Map->setTileAt(mcoord.x, mcoord.y+1, spritepaintertest+m_TilesDim.x);
-                            }
-
-                        }
                     }
                     //RETURN TO MAKE GUI MANIPULATION DEAD CODE FOR NOW
                     else continue;
@@ -314,7 +282,7 @@ void Engine::mainLoop()
         //draw mouse test painter
         if(spritepaintertest >= 0 && spritepaintertest < int(m_TilesSPR.size()) && m_Mode == MODE_EDIT)
         {
-            sf::Vector2i mtocoords = sf::Vector2i(mouseToMapCoords(&mousePos));
+            sf::Vector2i mtocoords = sf::Vector2i(screenToMapCoords(m_Screen->mapPixelToCoords(mousePosi)) );
 
             if(spritepaintersupertilesnap && spritepaintersupertile)
             {
@@ -337,9 +305,6 @@ void Engine::mainLoop()
 
         m_Screen->display();
     }
-
-    //save map on quit
-    m_Map->saveMapFile("map.dat");
 }
 
 void Engine::drawTile(sf::RenderTarget *tscreen, int x, int y, unsigned int tindex)
@@ -441,11 +406,11 @@ bool Engine::loadMap(std::string mapfile)
     return true;
 }
 
-sf::Vector2i Engine::mouseToMapCoords(sf::Vector2f *mousepos)
+sf::Vector2i Engine::screenToMapCoords(sf::Vector2f mousepos)
 {
     sf::Vector2i mapcoord;
-    mapcoord.x = mousepos->x / (CHUNK_SIZE*CHUNK_SCALE);
-    mapcoord.y = mousepos->y / (CHUNK_SIZE*CHUNK_SCALE);
+    mapcoord.x = mousepos.x / (CHUNK_SIZE*CHUNK_SCALE);
+    mapcoord.y = mousepos.y / (CHUNK_SIZE*CHUNK_SCALE);
 
     return mapcoord;
 }

@@ -134,9 +134,6 @@ bool Map::resizeToContainCoord(int x, int y)
 {
     std::cout << "Resizing map to contain coord " << x << "," << y << "...\n";
 
-    //dont handle negative number shift for now....
-    if(x < 0 || y < 0) return false;
-
     //if map data is empty
     if(m_MapData.empty())
     {
@@ -144,6 +141,37 @@ bool Map::resizeToContainCoord(int x, int y)
         m_MapData[0].push_back(-1);
         m_MapDim.x = 1;
         m_MapDim.y = 1;
+    }
+
+    //dont handle negative number shift for now....
+    if(x < 0 || y < 0)
+    {
+        std::cout << "Resizing and shifting map from negative coords " << x << "," << y << std::endl;
+
+        //if resizing to the negative directions, need to insert and shift data over
+
+        //if x is negative, need to extend map width
+        if(x < 0)
+        {
+            m_MapDim.x += abs(x);
+
+            for(int i = 0; i < int(m_MapData.size()); i++)
+            {
+                for(int n = 0; n <= abs(x); n++) m_MapData[i].insert(m_MapData[i].begin(), -1);
+            }
+        }
+
+        if(y < 0)
+        {
+            m_MapDim.y += abs(y);
+            std::vector<int> tempdata;
+            tempdata.resize(m_MapDim.x);
+            for(int i = 0; i < int(tempdata.size()); i++) tempdata[i] = -1;
+
+            for(int i = 0; i <= abs(y); i++) m_MapData.insert(m_MapData.begin(), tempdata);
+
+        }
+
     }
 
     //resize width

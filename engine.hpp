@@ -49,7 +49,7 @@ private:
 
     //draw functions
     void drawMap();
-    sf::Vector2i mouseToMapCoords(sf::Vector2f *mousepos);
+    sf::Vector2i screenToMapCoords(sf::Vector2f mousepos);
 
     //map functions
     bool loadMap(std::string mapfile);
