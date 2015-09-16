@@ -4,6 +4,7 @@ Engine::Engine()
 {
     //init pointers
     m_Map = NULL;
+    m_Player = NULL;
 
     //init vars
     m_Mode = MODE_PLAY;
@@ -14,6 +15,12 @@ Engine::Engine()
                                                 CHUNK_SIZE*CHUNK_SCALE*SCREEN_HEIGHT_CHUNKS,32), "Metroid");
     initTiles();
     initGUIobjs();
+
+    //create player object
+    m_Player = new Player;
+
+    //debug
+    testenemy = new Zoomer();
 
     loadMap("map.dat");
 

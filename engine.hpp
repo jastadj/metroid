@@ -9,6 +9,8 @@
 
 #include "map.hpp"
 #include "guiobj.hpp"
+#include "player.hpp"
+#include "enemy.hpp"
 
 #define CHUNK_SIZE 8
 #define CHUNK_SCALE 2
@@ -46,6 +48,8 @@ private:
     //game objects
     Map *m_Map;
     std::vector< GUIobj*> m_GUIobjs;
+    Player *m_Player;
+    Enemy *testenemy;
 
     //draw functions
     void drawMap();

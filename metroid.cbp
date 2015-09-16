@@ -43,13 +43,19 @@
 		<Linker>
 			<Add directory="../../SFML-2.2/lib" />
 		</Linker>
+		<Unit filename="enemy.cpp" />
+		<Unit filename="enemy.hpp" />
 		<Unit filename="engine.cpp" />
 		<Unit filename="engine.hpp" />
+		<Unit filename="gameobj.cpp" />
+		<Unit filename="gameobj.hpp" />
 		<Unit filename="guiobj.cpp" />
 		<Unit filename="guiobj.hpp" />
 		<Unit filename="main.cpp" />
 		<Unit filename="map.cpp" />
 		<Unit filename="map.hpp" />
+		<Unit filename="player.cpp" />
+		<Unit filename="player.hpp" />
 		<Unit filename="tools.cpp" />
 		<Unit filename="tools.hpp" />
 		<Extensions>
