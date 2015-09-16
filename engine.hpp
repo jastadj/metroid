@@ -7,15 +7,12 @@
 #include <vector>
 #include <SFML\Graphics.hpp>
 
+#include "defs.hpp"
 #include "map.hpp"
 #include "guiobj.hpp"
 #include "player.hpp"
 #include "enemy.hpp"
 
-#define CHUNK_SIZE 8
-#define CHUNK_SCALE 2
-#define SCREEN_WIDTH_CHUNKS 16*2
-#define SCREEN_HEIGHT_CHUNKS 15*2
 
 //metroid map 960x900
 enum {MODE_PLAY, MODE_EDIT, MODE_TOTAL};

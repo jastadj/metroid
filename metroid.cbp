@@ -43,6 +43,7 @@
 		<Linker>
 			<Add directory="../../SFML-2.2/lib" />
 		</Linker>
+		<Unit filename="defs.hpp" />
 		<Unit filename="enemy.cpp" />
 		<Unit filename="enemy.hpp" />
 		<Unit filename="engine.cpp" />

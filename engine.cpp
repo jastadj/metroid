@@ -13,6 +13,8 @@ Engine::Engine()
     std::cout << "Initializing render window...\n";
     m_Screen = new sf::RenderWindow(sf::VideoMode(CHUNK_SIZE*CHUNK_SCALE*SCREEN_WIDTH_CHUNKS,
                                                 CHUNK_SIZE*CHUNK_SCALE*SCREEN_HEIGHT_CHUNKS,32), "Metroid");
+    m_Screen->setFramerateLimit(FRAMERATE);
+
     initTiles();
     initGUIobjs();
 
@@ -21,6 +23,7 @@ Engine::Engine()
 
     //debug
     testenemy = new Zoomer();
+    testenemy->setPosition(16,16);
 
     loadMap("map.dat");
 
@@ -281,7 +284,13 @@ void Engine::mainLoop()
             }
         }//end event handling
 
+        //update
+        testenemy->update();
+
+
+        //draw
         drawMap();
+        testenemy->draw(m_Screen);
 
         //draw ui
         m_Screen->setView(m_Screen->getDefaultView());
