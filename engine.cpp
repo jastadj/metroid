@@ -1,4 +1,5 @@
 #include "engine.hpp"
+#include <sstream>
 
 Engine::Engine()
 {
@@ -18,12 +19,17 @@ Engine::Engine()
     initTiles();
     initGUIobjs();
 
+    //init font
+    std::cout << "Loading font...\n";
+    if(!m_Font.loadFromFile("font.ttf"))
+        std::cout << "Error loading font.ttf\n";
+
     //create player object
     m_Player = new Player;
 
     //debug
-    testenemy = new Zoomer();
-    testenemy->setPosition(16,16);
+    Enemy *newenemy = new Zoomer();
+    m_Enemies.push_back(newenemy);
 
     loadMap("map.dat");
 
@@ -285,12 +291,12 @@ void Engine::mainLoop()
         }//end event handling
 
         //update
-        testenemy->update();
+        updateEnemies();
 
 
         //draw
         drawMap();
-        testenemy->draw(m_Screen);
+        drawEnemies();
 
         //draw ui
         m_Screen->setView(m_Screen->getDefaultView());
@@ -319,7 +325,24 @@ void Engine::mainLoop()
             m_GUIobjs[i]->draw(m_Screen);
         }
 
+        //debug info
+        sf::Text debuginfo("", m_Font,12);
+        debuginfo.setColor(sf::Color::Red);
+        std::stringstream dinfoss;
+        sf::Vector2i mcoord = screenToMapCoords(m_Screen->mapPixelToCoords(mousePosi));
+        dinfoss << "mouse:" << mousePos.x << "," << mousePos.y << " (" << mcoord.x << "," << mcoord.y << ")";
+        debuginfo.setString(dinfoss.str());
+        m_Screen->draw(debuginfo);
+
         m_Screen->display();
+    }
+}
+
+void Engine::updateEnemies()
+{
+    for(int i = 0; i < int(m_Enemies.size()); i++)
+    {
+        m_Enemies[i]->update();
     }
 }
 
@@ -395,6 +418,14 @@ void Engine::drawMap()
         {
             drawTile(m_Screen, n, i, m_Map->getTileAt(n,i));
         }
+    }
+}
+
+void Engine::drawEnemies()
+{
+    for(int i = 0; i < int(m_Enemies.size()); i++)
+    {
+        m_Enemies[i]->draw(m_Screen);
     }
 }
 

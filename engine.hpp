@@ -33,6 +33,7 @@ private:
     sf::Texture m_TilesTXT;
     sf::Vector2u m_TilesDim;
     std::vector< sf::Sprite* > m_TilesSPR;
+    sf::Font m_Font;
 
     //draw
     void drawTile(sf::RenderTarget *tscreen, int x, int y, unsigned int tindex); //draw tile in tile coordinates
@@ -41,15 +42,17 @@ private:
 
     //loop
     void mainLoop();
+    void updateEnemies();
 
     //game objects
     Map *m_Map;
     std::vector< GUIobj*> m_GUIobjs;
     Player *m_Player;
-    Enemy *testenemy;
+    std::vector< Enemy*> m_Enemies;
 
     //draw functions
     void drawMap();
+    void drawEnemies();
     sf::Vector2i screenToMapCoords(sf::Vector2f mousepos);
 
     //map functions
