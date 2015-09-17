@@ -2,6 +2,7 @@
 #define CLASS_GAMEOBJ
 
 #include <SFML\Graphics.hpp>
+#include <vector>
 #include "defs.hpp"
 
 class GameOBJ
@@ -23,6 +24,8 @@ public:
     sf::Vector2f getPosition() { return m_Position;}
     void setPosition(sf::Vector2f npos) { m_Position = npos;}
     void setPosition(int x, int y) { setPosition(sf::Vector2f(x,y));}
+
+    std::vector< std::vector<int> > getOccupiedTiles();
 
     virtual void update()=0;
     virtual void draw(sf::RenderTarget *trender)=0;

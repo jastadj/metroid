@@ -1,5 +1,9 @@
 #include "enemy.hpp"
 
+//debug
+#include <iostream>
+#include <string>
+
 Enemy::Enemy()
 {
 
@@ -33,4 +37,9 @@ void Zoomer::update()
 void Zoomer::draw(sf::RenderTarget *trender)
 {
     trender->draw(*m_Sprite, m_Transform);
+
+    sf::FloatRect myrect = m_Transform.transformRect(m_Sprite->getLocalBounds());
+
+    std::cout << "myrect TL = " << myrect.left << "," << myrect.top << "    BR = " << myrect.left + myrect.width << "," << myrect.top + myrect.height << std::endl;
 }
+
