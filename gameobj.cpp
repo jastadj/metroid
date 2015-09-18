@@ -10,15 +10,3 @@ GameOBJ::~GameOBJ()
 {
 
 }
-
-std::vector< std::vector<int> > GameOBJ::getOccupiedTiles()
-{
-    std::vector< std::vector<int> > otiles;
-
-    //tile width
-    //int twidth = m_Transform.transformRect()
-
-}
-
-//void GameOBJ::update(){}
-//void GameOBJ::draw(sf::RenderTarget *trender) {}
