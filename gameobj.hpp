@@ -14,6 +14,8 @@ protected:
     sf::Vector2f m_Scale;
     float m_Rotation;
 
+    sf::FloatRect m_BoundingBox;
+
     sf::Clock m_Clock;
 
 public:
@@ -27,6 +29,7 @@ public:
 
     virtual void update()=0;
     virtual void draw(sf::RenderTarget *trender)=0;
+    void drawBoundingBox(sf::RenderTarget *trender);
 };
 
 #endif // CLASS_GAMEOBJ

@@ -119,6 +119,7 @@ void Engine::mainLoop()
         sf::Event event;
         sf::Vector2i mousePosi = sf::Mouse::getPosition(*m_Screen);
         sf::Vector2f mousePos = sf::Vector2f(mousePosi);
+        sf::Vector2f mousePosRel = m_Screen->mapPixelToCoords(mousePosi);
 
 
 
@@ -330,7 +331,7 @@ void Engine::mainLoop()
         debuginfo.setColor(sf::Color::Red);
         std::stringstream dinfoss;
         sf::Vector2i mcoord = screenToMapCoords(m_Screen->mapPixelToCoords(mousePosi));
-        dinfoss << "mouse:" << mousePos.x << "," << mousePos.y << " (" << mcoord.x << "," << mcoord.y << ")";
+        dinfoss << "mouse:" << mousePos.x << "," << mousePos.y << "  rel(" << mousePosRel.x << "," << mousePosRel.y << ")  grid(" << mcoord.x << "," << mcoord.y << ")";
         debuginfo.setString(dinfoss.str());
         m_Screen->draw(debuginfo);
 
