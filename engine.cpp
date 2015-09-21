@@ -29,6 +29,7 @@ Engine::Engine()
 
     //debug
     Enemy *newenemy = new Zoomer();
+    newenemy->setPositionGrid(1,1);
     m_Enemies.push_back(newenemy);
 
     loadMap("map.dat");

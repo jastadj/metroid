@@ -29,13 +29,14 @@ Zoomer::~Zoomer()
 
 void Zoomer::update()
 {
-    m_Position.x = m_Position.x + 0.5;
     m_Transform = sf::Transform();
     m_Transform.scale(m_Scale);
     m_Transform.translate(m_Position);
 
-    m_BoundingBox.left = m_Position.x;
-    m_BoundingBox.top = m_Position.y;
+
+    sf::Vector2f testpoint = m_Transform.transformPoint(0,0);
+    m_BoundingBox.left = testpoint.x;
+    m_BoundingBox.top = testpoint.y;
 }
 
 void Zoomer::draw(sf::RenderTarget *trender)
