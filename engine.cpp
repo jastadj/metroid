@@ -331,7 +331,7 @@ void Engine::mainLoop()
         sf::Text debuginfo("", m_Font,12);
         debuginfo.setColor(sf::Color::Red);
         std::stringstream dinfoss;
-        sf::Vector2i mcoord = screenToMapCoords(m_Screen->mapPixelToCoords(mousePosi));
+        sf::Vector2i mcoord = screenToMapCoords(m_Screen->mapPixelToCoords(sf::Vector2i(mousePosRel)) );
         dinfoss << "mouse:" << mousePos.x << "," << mousePos.y << "  rel(" << mousePosRel.x << "," << mousePosRel.y << ")  grid(" << mcoord.x << "," << mcoord.y << ")";
         debuginfo.setString(dinfoss.str());
         m_Screen->draw(debuginfo);
