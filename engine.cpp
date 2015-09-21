@@ -1,6 +1,8 @@
 #include "engine.hpp"
 #include <sstream>
 
+Engine *Engine::onlyinstance = NULL;
+
 Engine::Engine()
 {
     //init pointers

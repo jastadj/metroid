@@ -20,7 +20,8 @@ enum {MODE_PLAY, MODE_EDIT, MODE_TOTAL};
 class Engine
 {
 private:
-
+    Engine();
+    static Engine *onlyinstance;
     sf::RenderWindow *m_Screen;
 
     int m_Mode;
@@ -62,7 +63,11 @@ private:
     void testfunct();
 
 public:
-    Engine();
+    static Engine *getInstance()
+    {
+        if(onlyinstance == NULL) onlyinstance = new Engine;
+        return onlyinstance;
+    }
     ~Engine();
 };
 

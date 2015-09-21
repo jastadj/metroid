@@ -4,7 +4,8 @@
 int main(int argc, char *argv[])
 {
 
-    Engine engine;
+    Engine *engine = NULL;
+    engine = Engine::getInstance();
 
     return 0;
 }
