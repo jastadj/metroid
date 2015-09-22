@@ -5,6 +5,11 @@ Engine *Engine::onlyinstance = NULL;
 
 Engine::Engine()
 {
+
+}
+
+void Engine::start()
+{
     //init pointers
     m_Map = NULL;
     m_Player = NULL;
@@ -20,6 +25,7 @@ Engine::Engine()
 
     initTiles();
     initGUIobjs();
+    initEnemies();
 
     //init font
     std::cout << "Loading font...\n";
@@ -29,10 +35,6 @@ Engine::Engine()
     //create player object
     m_Player = new Player;
 
-    //debug
-    Enemy *newenemy = new Zoomer();
-    newenemy->setPositionGrid(1,1);
-    m_Enemies.push_back(newenemy);
 
     loadMap("map.dat");
 
@@ -98,8 +100,44 @@ bool Engine::initGUIobjs()
     return true;
 }
 
+bool Engine::initEnemies()
+{
+    std::cout << "Initializing enemies...\n";
+    //load ripper
+    if(!m_RipperTXT.loadFromFile("ripper.png") )
+    {
+        std::cout << "Error loading ripper.png\n";
+        return false;
+    }
+
+    //load ripper sprite
+    for(int i = 0; i < 2; i++)
+    {
+        sf::IntRect newrect;
+        newrect.left = i*CHUNK_SIZE;
+        newrect.top = 0;
+        newrect.width = CHUNK_SIZE*2;
+        newrect.height = CHUNK_SIZE;
+
+        sf::Sprite *newsprite = new sf::Sprite(m_RipperTXT, newrect);
+        m_RipperSPR.push_back(newsprite);
+    }
+
+    std::cout << "Enemies loaded successfully.\n";
+
+    return true;
+}
+
 void Engine::mainLoop()
 {
+    //debug
+    Enemy *newenemy = new Zoomer();
+    newenemy->setPositionGrid(1,1);
+    m_Enemies.push_back(newenemy);
+    newenemy = new Ripper();
+    newenemy->setPositionGrid(4,4);
+    m_Enemies.push_back(newenemy);
+
     bool quit = false;
 
     //create viewport

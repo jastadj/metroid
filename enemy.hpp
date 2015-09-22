@@ -25,4 +25,16 @@ public:
     void update();
     void draw(sf::RenderTarget *trender);
 };
+
+class Ripper:public Enemy
+{
+private:
+
+public:
+    Ripper();
+    ~Ripper();
+
+    void update();
+    void draw(sf::RenderTarget *trender);
+};
 #endif // CLASS_ENEMY

@@ -29,11 +29,14 @@ private:
     //init
     bool initTiles();
     bool initGUIobjs();
+    bool initEnemies();
 
     //resources
     sf::Texture m_TilesTXT;
+    sf::Texture m_RipperTXT;
     sf::Vector2u m_TilesDim;
     std::vector< sf::Sprite* > m_TilesSPR;
+    std::vector< sf::Sprite* > m_RipperSPR;
     sf::Font m_Font;
 
     //draw
@@ -69,6 +72,11 @@ public:
         return onlyinstance;
     }
     ~Engine();
+
+    void start();
+
+    //get sprites
+    std::vector< sf::Sprite* > *getRipperSPR() { return &m_RipperSPR;}
 };
 
 #endif // CLASS_ENGINE
