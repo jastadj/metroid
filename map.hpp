@@ -26,5 +26,10 @@ public:
     bool setTileAt(int x, int y, int tileindex);
 
     bool resizeToContainCoord(int x, int y);
+
+    int getMapWidth() { return m_MapDim.x;}
+    int getMapHeight() { return m_MapDim.y;}
+
+    const std::vector< std::vector<int> > *getMapData() const {return &m_MapData;}
 };
 #endif // CLASS_MAP

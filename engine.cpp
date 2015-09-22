@@ -114,7 +114,7 @@ bool Engine::initEnemies()
     for(int i = 0; i < 2; i++)
     {
         sf::IntRect newrect;
-        newrect.left = i*CHUNK_SIZE;
+        newrect.left = i*CHUNK_SIZE*2;
         newrect.top = 0;
         newrect.width = CHUNK_SIZE*2;
         newrect.height = CHUNK_SIZE;

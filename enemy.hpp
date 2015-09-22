@@ -7,9 +7,14 @@ class Enemy: public GameOBJ
 {
 protected:
 
+    int m_Direction;
+
 public:
     Enemy();
     ~Enemy();
+
+    void setDirection(int ndir) { m_Direction = ndir;}
+    int getDirection() { return m_Direction;}
 };
 
 class Zoomer:public Enemy
@@ -35,6 +40,7 @@ public:
     ~Ripper();
 
     void update();
+    void updateSprite();
     void draw(sf::RenderTarget *trender);
 };
 #endif // CLASS_ENEMY

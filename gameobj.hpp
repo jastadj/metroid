@@ -29,8 +29,12 @@ public:
     void setPositionGrid(int x, int y) { setPosition( sf::Vector2f(x*CHUNK_SIZE*CHUNK_SCALE, y*CHUNK_SIZE*CHUNK_SCALE) );}
 
     virtual void update()=0;
+    virtual void updateTransform();
     virtual void draw(sf::RenderTarget *trender)=0;
+
+    //bounding box and collisions
     void drawBoundingBox(sf::RenderTarget *trender);
+    bool validPosition();
 };
 
 #endif // CLASS_GAMEOBJ

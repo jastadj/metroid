@@ -57,7 +57,6 @@ private:
     //draw functions
     void drawMap();
     void drawEnemies();
-    sf::Vector2i screenToMapCoords(sf::Vector2f mousepos);
 
     //map functions
     bool loadMap(std::string mapfile);
@@ -77,6 +76,12 @@ public:
 
     //get sprites
     std::vector< sf::Sprite* > *getRipperSPR() { return &m_RipperSPR;}
+
+    //map
+    sf::Vector2i screenToMapCoords(sf::Vector2f mousepos);
+    int getMapWidth() { return m_Map->getMapWidth();}
+    int getMapHeight() { return m_Map->getMapHeight();}
+    const std::vector< std::vector<int> > *getMapData() const { return m_Map->getMapData(); }
 };
 
 #endif // CLASS_ENGINE
