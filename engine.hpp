@@ -30,13 +30,16 @@ private:
     bool initTiles();
     bool initGUIobjs();
     bool initEnemies();
+    bool initPlayer();
 
     //resources
     sf::Texture m_TilesTXT;
     sf::Texture m_RipperTXT;
+    sf::Texture m_SamusTXT;
     sf::Vector2u m_TilesDim;
     std::vector< sf::Sprite* > m_TilesSPR;
     std::vector< sf::Sprite* > m_RipperSPR;
+    std::vector< sf::Sprite* > m_SamusSPR;
     sf::Font m_Font;
 
     //draw
@@ -76,6 +79,7 @@ public:
 
     //get sprites
     std::vector< sf::Sprite* > *getRipperSPR() { return &m_RipperSPR;}
+    std::vector< sf::Sprite* > *getSamusSPR() { return &m_SamusSPR;}
 
     //map
     sf::Vector2i screenToMapCoords(sf::Vector2f mousepos);

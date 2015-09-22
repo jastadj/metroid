@@ -26,14 +26,12 @@ void Engine::start()
     initTiles();
     initGUIobjs();
     initEnemies();
+    initPlayer();
 
     //init font
     std::cout << "Loading font...\n";
     if(!m_Font.loadFromFile("font.ttf"))
         std::cout << "Error loading font.ttf\n";
-
-    //create player object
-    m_Player = new Player;
 
 
     loadMap("map.dat");
@@ -123,7 +121,44 @@ bool Engine::initEnemies()
         m_RipperSPR.push_back(newsprite);
     }
 
-    std::cout << "Enemies loaded successfully.\n";
+    std::cout << "Enemies loaded successfuly.\n";
+
+    return true;
+}
+
+bool Engine::initPlayer()
+{
+    //samus sprite dimensions
+    int samusheight = 40;
+    int samuswidth = 24;
+
+    std::cout << "Initializing player...\n";
+    //load samus texture
+    if(!m_SamusTXT.loadFromFile("samus.png"))
+    {
+        std::cout << "Error loading samus.png!\n";
+        return false;
+    }
+
+    //create samus sprites from texture
+    for(int i = 0; i <= m_SamusTXT.getSize().y/samusheight; i++)
+    {
+        for(int n = 0; n <= m_SamusTXT.getSize().x/samuswidth; n++)
+        {
+            sf::IntRect srect;
+            srect.left = n * samuswidth;
+            srect.top = i * samusheight;
+            srect.width = samuswidth;
+            srect.height = samusheight;
+            sf::Sprite *newsprite = new sf::Sprite(m_SamusTXT, srect);
+            m_SamusSPR.push_back(newsprite);
+        }
+    }
+
+    //create player object
+    m_Player = new Player();
+
+    std::cout << "Player initialized successfuly.\n";
 
     return true;
 }
@@ -333,11 +368,13 @@ void Engine::mainLoop()
         }//end event handling
 
         //update
+        m_Player->update();
         updateEnemies();
 
 
         //draw
         drawMap();
+        m_Player->draw(m_Screen);
         drawEnemies();
 
         //draw ui
