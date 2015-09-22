@@ -502,10 +502,3 @@ sf::Vector2i Engine::screenToMapCoords(sf::Vector2f mousepos)
 
     return mapcoord;
 }
-
-///////////////////////
-// debug
-void Engine::testfunct()
-{
-    std::cout << "Test functioned executed...\n";
-}

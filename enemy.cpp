@@ -69,11 +69,11 @@ void Ripper::update()
 
     updateTransform();
 
+    //if position is not valid, revert adjustment and reverse direction
     if(!validPosition())
     {
-        std::cout << "not valid position!\n";
 
-        //revert position change
+        //going right?
         if(m_Direction == 0)
         {
             m_Position.x -= 1;
@@ -106,5 +106,6 @@ void Ripper::draw(sf::RenderTarget *trender)
     }
     else trender->draw( *(*eptr->getRipperSPR())[1], m_Transform);
 
+    //draw bounding box for debug
     drawBoundingBox(trender);
 }
