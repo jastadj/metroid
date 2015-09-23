@@ -57,8 +57,8 @@ Ripper::~Ripper()
 void Ripper::update()
 {
     //if direction is to the right (0) move positive
-    if(!m_Direction) m_Position.x += 1;
-    else m_Position.x -= 1;
+    if(!m_Direction) m_Vel.x = 1;
+    else m_Vel.x = -1;
 
     updateTransform();
 
@@ -69,11 +69,11 @@ void Ripper::update()
         //going right?
         if(m_Direction == 0)
         {
-            m_Position.x -= 1;
+            m_Vel.x = -1;
         }
         else
         {
-            m_Position.x += 1;
+            m_Vel.x = 1;
         }
 
         //reverse direction

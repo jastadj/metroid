@@ -12,6 +12,7 @@ protected:
     sf::Vector2f m_Position;
     sf::Transform m_Transform;
     sf::Vector2f m_Scale;
+    sf::Vector2f m_Vel;
     float m_Rotation;
 
     sf::FloatRect m_BoundingBox;
@@ -24,9 +25,12 @@ public:
     virtual ~GameOBJ()=0;
 
     sf::Vector2f getPosition() { return m_Position;}
+    sf::Vector2f getVelocity() { return m_Vel;}
     void setPosition(sf::Vector2f npos) { m_Position = npos;}
     void setPosition(int x, int y) { setPosition(sf::Vector2f(x,y));}
     void setPositionGrid(int x, int y) { setPosition( sf::Vector2f(x*CHUNK_SIZE*CHUNK_SCALE, y*CHUNK_SIZE*CHUNK_SCALE) );}
+    void setVelocity(float x, float y) { m_Vel = sf::Vector2f(x,y);}
+    void setVelocity(sf::Vector2f nvel) { m_Vel = nvel;}
 
     virtual void update()=0;
     virtual void updateTransform();

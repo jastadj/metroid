@@ -57,6 +57,10 @@ bool GameOBJ::validPosition()
 
 void GameOBJ::updateTransform()
 {
+    //apply velocity to position
+    //does this really belong here??
+    m_Position += m_Vel;
+
     m_Transform = sf::Transform();
     m_Transform.scale(m_Scale);
     m_Transform.translate(m_Position);

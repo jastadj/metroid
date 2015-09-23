@@ -269,10 +269,38 @@ void Engine::mainLoop()
             {
                 if(event.key.code == sf::Keyboard::Escape) quit = true;
                 //move viewport around
-                else if(event.key.code == sf::Keyboard::W) viewcenter.y -= CHUNK_SIZE*CHUNK_SCALE;
-                else if(event.key.code == sf::Keyboard::S) viewcenter.y += CHUNK_SIZE*CHUNK_SCALE;
-                else if(event.key.code == sf::Keyboard::A) viewcenter.x -= CHUNK_SIZE*CHUNK_SCALE;
-                else if(event.key.code == sf::Keyboard::D) viewcenter.x += CHUNK_SIZE*CHUNK_SCALE;
+                else if(event.key.code == sf::Keyboard::W)
+                {
+                    if(m_Mode == MODE_EDIT) viewcenter.y -= CHUNK_SIZE*CHUNK_SCALE;
+                    else
+                    {
+
+                    }
+                }
+                else if(event.key.code == sf::Keyboard::S)
+                {
+                    if(m_Mode == MODE_EDIT) viewcenter.y += CHUNK_SIZE*CHUNK_SCALE;
+                    else
+                    {
+
+                    }
+                }
+                else if(event.key.code == sf::Keyboard::A)
+                {
+                    if(m_Mode == MODE_EDIT) viewcenter.x -= CHUNK_SIZE*CHUNK_SCALE;
+                    else
+                    {
+
+                    }
+                }
+                else if(event.key.code == sf::Keyboard::D)
+                {
+                    if(m_Mode == MODE_EDIT) viewcenter.x += CHUNK_SIZE*CHUNK_SCALE;
+                    else
+                    {
+
+                    }
+                }
                 else if(event.key.code == sf::Keyboard::F1)
                 {
                     if(m_Mode == MODE_PLAY) m_Mode = MODE_EDIT;
