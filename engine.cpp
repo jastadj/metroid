@@ -303,6 +303,13 @@ void Engine::mainLoop()
                         m_Player->run(0);
                     }
                 }
+                else if(event.key.code == sf::Keyboard::Space)
+                {
+                    if(m_Mode == MODE_PLAY)
+                    {
+                        m_Player->jump();
+                    }
+                }
                 else if(event.key.code == sf::Keyboard::F1)
                 {
                     if(m_Mode == MODE_PLAY) m_Mode = MODE_EDIT;

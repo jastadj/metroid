@@ -18,5 +18,6 @@ public:
     void draw(sf::RenderTarget *trender);
 
     void run(int dir);
+    void jump();
 };
 #endif // CLASS_PLAYER

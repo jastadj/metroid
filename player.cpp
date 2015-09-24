@@ -107,3 +107,7 @@ void Player::run(int dir)
     }
 }
 
+void Player::jump()
+{
+    if(onGround()) m_Vel.y -= PLAYER_JUMP_VEL;
+}
