@@ -131,7 +131,7 @@ bool Engine::initPlayer()
 {
     //samus sprite dimensions
     int samusheight = 40;
-    int samuswidth = 24;
+    int samuswidth = 28;
 
     std::cout << "Initializing player...\n";
     //load samus texture
@@ -159,6 +159,7 @@ bool Engine::initPlayer()
     //create player object
     m_Player = new Player();
 
+    m_Player->setPositionGrid(8,10);
     std::cout << "Player initialized successfuly.\n";
 
     return true;

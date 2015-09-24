@@ -16,6 +16,7 @@ protected:
     float m_Rotation;
 
     sf::FloatRect m_BoundingBox;
+    sf::Vector2f m_BoundingBoxOffset;
 
     int m_Frame;
 
@@ -41,6 +42,7 @@ public:
     //bounding box and collisions
     void drawBoundingBox(sf::RenderTarget *trender);
     bool validPosition();
+    bool onGround();
 };
 
 #endif // CLASS_GAMEOBJ

@@ -7,6 +7,12 @@ Player::Player()
     //m_BoundingBox.
 
     m_RunDir = -1;
+
+    m_BoundingBox.width = 8*CHUNK_SCALE;
+    m_BoundingBox.height = 30*CHUNK_SCALE;
+
+    m_BoundingBoxOffset.x = 10*CHUNK_SCALE;
+    m_BoundingBoxOffset.y = 9*CHUNK_SCALE;
 }
 
 Player::~Player()
@@ -17,6 +23,39 @@ Player::~Player()
 void Player::update()
 {
     updateTransform();
+
+    /*
+    //if direction is to the right (0) move positive
+    if(!m_Direction) m_Vel.x = RIPPER_MOVE_SPEED;
+    else m_Vel.x = -1*RIPPER_MOVE_SPEED;
+
+    updateTransform();
+
+    //if position is not valid, revert adjustment and reverse direction
+    if(!validPosition())
+    {
+
+        //going right?
+        if(m_Direction == 0)
+        {
+            m_Vel.x = -1*RIPPER_MOVE_SPEED;
+        }
+        else
+        {
+            m_Vel.x = RIPPER_MOVE_SPEED;
+        }
+
+        //reverse direction
+        if(m_Direction == 0) m_Direction = 1;
+        else m_Direction = 0;
+
+        updateTransform();
+    }
+
+    //determine which sprite to use
+    if(!m_Direction) m_Frame = 0;
+    else m_Frame = 1;
+    */
 
 }
 
