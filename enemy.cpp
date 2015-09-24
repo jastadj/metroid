@@ -57,8 +57,8 @@ Ripper::~Ripper()
 void Ripper::update()
 {
     //if direction is to the right (0) move positive
-    if(!m_Direction) m_Vel.x = 1;
-    else m_Vel.x = -1;
+    if(!m_Direction) m_Vel.x = RIPPER_MOVE_SPEED;
+    else m_Vel.x = -1*RIPPER_MOVE_SPEED;
 
     updateTransform();
 
@@ -69,11 +69,11 @@ void Ripper::update()
         //going right?
         if(m_Direction == 0)
         {
-            m_Vel.x = -1;
+            m_Vel.x = -1*RIPPER_MOVE_SPEED;
         }
         else
         {
-            m_Vel.x = 1;
+            m_Vel.x = RIPPER_MOVE_SPEED;
         }
 
         //reverse direction
@@ -82,6 +82,10 @@ void Ripper::update()
 
         updateTransform();
     }
+
+    //determine which sprite to use
+    if(!m_Direction) m_Frame = 0;
+    else m_Frame = 1;
 }
 
 
@@ -92,12 +96,7 @@ void Ripper::draw(sf::RenderTarget *trender)
     Engine *eptr = NULL;
     eptr = Engine::getInstance();
 
-    //determine which sprite to use
-    if(!m_Direction)
-    {
-        trender->draw( *(*eptr->getRipperSPR())[0], m_Transform);
-    }
-    else trender->draw( *(*eptr->getRipperSPR())[1], m_Transform);
+    trender->draw( *(*eptr->getRipperSPR())[m_Frame], m_Transform);
 
     //draw bounding box for debug
     drawBoundingBox(trender);

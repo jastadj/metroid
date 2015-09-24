@@ -17,6 +17,8 @@ protected:
 
     sf::FloatRect m_BoundingBox;
 
+    int m_Frame;
+
     sf::Clock m_Clock;
 
 public:

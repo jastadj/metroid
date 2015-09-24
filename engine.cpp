@@ -22,6 +22,7 @@ void Engine::start()
     m_Screen = new sf::RenderWindow(sf::VideoMode(CHUNK_SIZE*CHUNK_SCALE*SCREEN_WIDTH_CHUNKS,
                                                 CHUNK_SIZE*CHUNK_SCALE*SCREEN_HEIGHT_CHUNKS,32), "Metroid");
     m_Screen->setFramerateLimit(FRAMERATE);
+    //m_Screen->setKeyRepeatEnabled(false);
 
     initTiles();
     initGUIobjs();
@@ -290,7 +291,7 @@ void Engine::mainLoop()
                     if(m_Mode == MODE_EDIT) viewcenter.x -= CHUNK_SIZE*CHUNK_SCALE;
                     else
                     {
-
+                        m_Player->run(1);
                     }
                 }
                 else if(event.key.code == sf::Keyboard::D)
@@ -298,7 +299,7 @@ void Engine::mainLoop()
                     if(m_Mode == MODE_EDIT) viewcenter.x += CHUNK_SIZE*CHUNK_SCALE;
                     else
                     {
-
+                        m_Player->run(0);
                     }
                 }
                 else if(event.key.code == sf::Keyboard::F1)
@@ -313,6 +314,32 @@ void Engine::mainLoop()
                     if(m_Mode == MODE_EDIT)
                     {
                         spritepaintersupertile = !spritepaintersupertile;
+                    }
+                }
+            }
+            else if(event.type == sf::Event::KeyReleased)
+            {
+                if(m_Mode == MODE_PLAY)
+                {
+                    if(event.key.code == sf::Keyboard::D)
+                    {
+                        sf::Vector2f pvel = m_Player->getVelocity();
+                        //if A key is still pressed, adjust velocity appropriately
+                        if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+                        {
+                            m_Player->run(1);
+                        }
+                        else m_Player->run(-1);
+                    }
+                    else if(event.key.code == sf::Keyboard::A)
+                    {
+                        sf::Vector2f pvel = m_Player->getVelocity();
+                        //if A key is still pressed, adjust velocity appropriately
+                        if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+                        {
+                            m_Player->run(0);
+                        }
+                        else m_Player->run(-1);
                     }
                 }
             }

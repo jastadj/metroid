@@ -8,4 +8,8 @@
 
 #define FRAMERATE 30
 
+#define PLAYER_MOVE_SPEED 1
+
+#define RIPPER_MOVE_SPEED 1
+
 #endif // CLASS_DEFS
