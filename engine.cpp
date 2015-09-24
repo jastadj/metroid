@@ -22,7 +22,7 @@ void Engine::start()
     m_Screen = new sf::RenderWindow(sf::VideoMode(CHUNK_SIZE*CHUNK_SCALE*SCREEN_WIDTH_CHUNKS,
                                                 CHUNK_SIZE*CHUNK_SCALE*SCREEN_HEIGHT_CHUNKS,32), "Metroid");
     m_Screen->setFramerateLimit(FRAMERATE);
-    //m_Screen->setKeyRepeatEnabled(false);
+    m_Screen->setKeyRepeatEnabled(false);
 
     initTiles();
     initGUIobjs();
@@ -142,9 +142,9 @@ bool Engine::initPlayer()
     }
 
     //create samus sprites from texture
-    for(int i = 0; i <= m_SamusTXT.getSize().y/samusheight; i++)
+    for(int i = 0; i < m_SamusTXT.getSize().y/samusheight; i++)
     {
-        for(int n = 0; n <= m_SamusTXT.getSize().x/samuswidth; n++)
+        for(int n = 0; n < m_SamusTXT.getSize().x/samuswidth; n++)
         {
             sf::IntRect srect;
             srect.left = n * samuswidth;

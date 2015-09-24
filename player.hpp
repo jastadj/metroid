@@ -9,6 +9,7 @@ private:
 
     int m_RunDir; // -1 = no run, 0 = run right, 1 = run left
 
+    sf::Clock debugclock;
 public:
     Player();
     ~Player();

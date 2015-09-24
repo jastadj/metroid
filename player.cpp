@@ -25,12 +25,14 @@ void Player::draw(sf::RenderTarget *trender)
     //update frame
     if(m_RunDir == 0)
     {
-        m_Frame++;
+        if(m_Frame > 3) m_Frame = 1;
+        else m_Frame++;
         if(m_Frame > 3) m_Frame = 1;
     }
     else if(m_RunDir == 1)
     {
-        m_Frame++;
+        if(m_Frame < 5) m_Frame = 6;
+        else m_Frame++;
         if(m_Frame > 7) m_Frame = 5;
     }
     else if(m_RunDir = -1)
@@ -39,6 +41,10 @@ void Player::draw(sf::RenderTarget *trender)
         else if(m_Frame >=4 && m_Frame <= 7) m_Frame = 4;
         else std::cout << "Error animating player when not running\n";
     }
+
+
+    std::cout << "rundir = " << m_RunDir << "   -   frame = " << m_Frame << std::endl;
+
     //get engine ref
     Engine *eptr = NULL;
     eptr = Engine::getInstance();
@@ -47,6 +53,8 @@ void Player::draw(sf::RenderTarget *trender)
     tsprite = (*eptr->getSamusSPR())[m_Frame];
 
     trender->draw(*tsprite, m_Transform);
+
+    drawBoundingBox(trender);
 }
 
 void Player::run(int dir)
