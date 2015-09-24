@@ -22,45 +22,33 @@ Player::~Player()
 
 void Player::update()
 {
+    sf::Vector2f oldpos = m_Position;
+    //sf::Vector2f oldvel = m_Vel;
+
+    //update gravity
+    if(!onGround())
+    {
+        m_Vel.y += PLAYER_FALL_ACCEL;
+        if(m_Vel.y > PLAYER_FALL_TERMINAL_VEL) m_Vel.y = PLAYER_FALL_TERMINAL_VEL;
+    }
+
+    //update
     updateTransform();
 
-    /*
-    //if direction is to the right (0) move positive
-    if(!m_Direction) m_Vel.x = RIPPER_MOVE_SPEED;
-    else m_Vel.x = -1*RIPPER_MOVE_SPEED;
-
-    updateTransform();
-
-    //if position is not valid, revert adjustment and reverse direction
+    //if position is not valid, go back to old position
     if(!validPosition())
     {
+        m_Position = oldpos;
 
-        //going right?
-        if(m_Direction == 0)
-        {
-            m_Vel.x = -1*RIPPER_MOVE_SPEED;
-        }
-        else
-        {
-            m_Vel.x = RIPPER_MOVE_SPEED;
-        }
+        if(m_Vel.x > 0) m_Vel.x = 0;
+        else if(m_Vel.x < 0) m_Vel.x = 0;
 
-        //reverse direction
-        if(m_Direction == 0) m_Direction = 1;
-        else m_Direction = 0;
-
+        if(m_Vel.y > 0) m_Vel.y = 0;
+        else if(m_Vel.y < 0) m_Vel.y = 0;
         updateTransform();
     }
 
-    //determine which sprite to use
-    if(!m_Direction) m_Frame = 0;
-    else m_Frame = 1;
-    */
 
-}
-
-void Player::draw(sf::RenderTarget *trender)
-{
     //update frame
     if(m_RunDir == 0)
     {
@@ -80,10 +68,10 @@ void Player::draw(sf::RenderTarget *trender)
         else if(m_Frame >=4 && m_Frame <= 7) m_Frame = 4;
         else std::cout << "Error animating player when not running\n";
     }
+}
 
-
-    std::cout << "rundir = " << m_RunDir << "   -   frame = " << m_Frame << std::endl;
-
+void Player::draw(sf::RenderTarget *trender)
+{
     //get engine ref
     Engine *eptr = NULL;
     eptr = Engine::getInstance();

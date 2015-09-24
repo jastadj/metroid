@@ -69,16 +69,16 @@ bool GameOBJ::onGround()
 
         for(int n = p0.x; n <= p1.x; n++)
         {
-            if(p1.x < 0 || n < 0 || p1.y >= eptr->getMapHeight() || n >= eptr->getMapWidth()) return false;
+            if(p1.x < 0 || n < 0 || p1.y >= eptr->getMapHeight() || n >= eptr->getMapWidth()) return true;
             else
             {
                 const std::vector< std::vector<int> > *mdata = eptr->getMapData();
 
-                if( (*mdata)[p1.y+1][n] != 0) return false;
+                if( (*mdata)[p1.y+1][n] != 0) return true;
             }
         }
 
-    return true;
+    return false;
 }
 
 void GameOBJ::updateTransform()
