@@ -34,6 +34,8 @@ public:
     void setPositionGrid(int x, int y) { setPosition( sf::Vector2f(x*CHUNK_SIZE*CHUNK_SCALE, y*CHUNK_SIZE*CHUNK_SCALE) );}
     void setVelocity(float x, float y) { m_Vel = sf::Vector2f(x,y);}
     void setVelocity(sf::Vector2f nvel) { m_Vel = nvel;}
+    void setVelocityX(float xvel) { m_Vel.x = xvel;}
+    void setVelocityY(float yvel) { m_Vel.y = yvel;}
 
     virtual void update()=0;
     virtual void updateTransform();
@@ -42,7 +44,10 @@ public:
     //bounding box and collisions
     void drawBoundingBox(sf::RenderTarget *trender);
     bool validPosition();
-    bool onGround();
+    bool touchingBottom(sf::Vector2f *coffset = NULL);
+    bool touchingTop();
+    bool touchingRight();
+    bool touchingLeft();
 };
 
 #endif // CLASS_GAMEOBJ

@@ -6,8 +6,6 @@ Player::Player()
     //set player bounding box dimensions
     //m_BoundingBox.
 
-    m_RunDir = -1;
-
     m_BoundingBox.width = 8*CHUNK_SCALE;
     m_BoundingBox.height = 30*CHUNK_SCALE;
 
@@ -22,20 +20,42 @@ Player::~Player()
 
 void Player::update()
 {
+    //capture old position/velocity
     sf::Vector2f oldpos = m_Position;
-    //sf::Vector2f oldvel = m_Vel;
+    sf::Vector2f oldvel = m_Vel;
+    sf::Vector2f coffset;
 
-    //update gravity
-    if(!onGround())
+    //apply gravity
+    m_Vel.y += PLAYER_FALL_ACCEL;
+    if(m_Vel.y > PLAYER_FALL_TERMINAL_VEL) m_Vel.y = PLAYER_FALL_TERMINAL_VEL;
+
+    //advance step
+    //updateTransform();
+
+    //check y axis for collision (floor, etc)
+    if(touchingBottom(&coffset) && m_Vel.y > 0)
     {
-        m_Vel.y += PLAYER_FALL_ACCEL;
-        if(m_Vel.y > PLAYER_FALL_TERMINAL_VEL) m_Vel.y = PLAYER_FALL_TERMINAL_VEL;
+        m_Vel.y = 0;
+        m_Position.y += coffset.y;
+        //updateTransform();
+    }
+
+
+    if(touchingRight())
+    {
+        //m_Vel.x = 0;
+    }
+
+    if(touchingLeft())
+    {
+        //m_Vel.x = 0;
     }
 
     //update
     updateTransform();
 
     //if position is not valid, go back to old position
+    /*
     if(!validPosition())
     {
         m_Position = oldpos;
@@ -47,22 +67,23 @@ void Player::update()
         else if(m_Vel.y < 0) m_Vel.y = 0;
         updateTransform();
     }
+    */
 
 
     //update frame
-    if(m_RunDir == 0)
+    if(m_Vel.x > 0)
     {
         if(m_Frame > 3) m_Frame = 1;
         else m_Frame++;
         if(m_Frame > 3) m_Frame = 1;
     }
-    else if(m_RunDir == 1)
+    else if(m_Vel.x < 0)
     {
         if(m_Frame < 5) m_Frame = 6;
         else m_Frame++;
         if(m_Frame > 7) m_Frame = 5;
     }
-    else if(m_RunDir = -1)
+    else if(m_Vel.x == 0)
     {
         if(m_Frame >= 0 && m_Frame <= 3) m_Frame = 0;
         else if(m_Frame >=4 && m_Frame <= 7) m_Frame = 4;
@@ -84,30 +105,3 @@ void Player::draw(sf::RenderTarget *trender)
     drawBoundingBox(trender);
 }
 
-void Player::run(int dir)
-{
-    m_RunDir = dir;
-
-    switch(m_RunDir)
-    {
-    case -1:
-        m_Vel.x = 0;
-        break;
-    case 0:
-        m_Vel.x = PLAYER_MOVE_SPEED;
-        break;
-    case 1:
-        m_Vel.x = -1*PLAYER_MOVE_SPEED;
-        break;
-    default:
-        std::cout << "Error in Player::run(dir) - " << dir << " is an invalid run direction!\n";
-        m_RunDir = -1;
-        m_Vel.x = 0;
-        break;
-    }
-}
-
-void Player::jump()
-{
-    if(onGround()) m_Vel.y -= PLAYER_JUMP_VEL;
-}

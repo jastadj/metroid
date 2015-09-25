@@ -56,7 +56,40 @@ bool GameOBJ::validPosition()
     return true;
 }
 
-bool GameOBJ::onGround()
+bool GameOBJ::touchingBottom(sf::Vector2f *coffset)
+{
+    //get engine reference
+    Engine *eptr = NULL;
+    eptr = Engine::getInstance();
+
+    sf::Vector2f topleft( float(m_BoundingBox.left), float(m_BoundingBox.top));
+    sf::Vector2f bottomright( topleft.x + m_BoundingBox.width, topleft.y + m_BoundingBox.height);
+    sf::Vector2i p0 = eptr->screenToMapCoords(topleft);
+    sf::Vector2i p1 = eptr->screenToMapCoords(bottomright);
+
+        for(int n = p0.x; n <= p1.x; n++)
+        {
+            if(p1.x < 0 || n < 0 || p1.y+1 >= eptr->getMapHeight() || n >= eptr->getMapWidth()) return true;
+            else
+            {
+                const std::vector< std::vector<int> > *mdata = eptr->getMapData();
+
+                if( (*mdata)[p1.y][n] != 0)
+                {
+                    if(coffset != NULL)
+                    {
+                        coffset->y = p1.y*CHUNK_SCALE*CHUNK_SIZE - bottomright.y;
+                        if(coffset->y != 0) std::cout << "touching bottom y offset : " << coffset->y << std::endl;
+                    }
+                    return true;
+                }
+            }
+        }
+
+    return false;
+}
+
+bool GameOBJ::touchingTop()
 {
     //get engine reference
     Engine *eptr = NULL;
@@ -74,7 +107,57 @@ bool GameOBJ::onGround()
             {
                 const std::vector< std::vector<int> > *mdata = eptr->getMapData();
 
-                if( (*mdata)[p1.y+1][n] != 0) return true;
+                if( (*mdata)[p0.y][n] != 0) return true;
+            }
+        }
+
+    return false;
+}
+
+bool GameOBJ::touchingRight()
+{
+    //get engine reference
+    Engine *eptr = NULL;
+    eptr = Engine::getInstance();
+
+    sf::Vector2f topleft( float(m_BoundingBox.left), float(m_BoundingBox.top));
+    sf::Vector2f bottomright( topleft.x + m_BoundingBox.width, topleft.y + m_BoundingBox.height);
+    sf::Vector2i p0 = eptr->screenToMapCoords(topleft);
+    sf::Vector2i p1 = eptr->screenToMapCoords(bottomright);
+
+        for(int n = p0.y; n <= p1.y; n++)
+        {
+            if(p1.x < 0 || n < 0 || p1.y >= eptr->getMapHeight() || n >= eptr->getMapWidth()) return true;
+            else
+            {
+                const std::vector< std::vector<int> > *mdata = eptr->getMapData();
+
+                if( (*mdata)[n][p1.x] != 0) return true;
+            }
+        }
+
+    return false;
+}
+
+bool GameOBJ::touchingLeft()
+{
+    //get engine reference
+    Engine *eptr = NULL;
+    eptr = Engine::getInstance();
+
+    sf::Vector2f topleft( float(m_BoundingBox.left), float(m_BoundingBox.top));
+    sf::Vector2f bottomright( topleft.x + m_BoundingBox.width, topleft.y + m_BoundingBox.height);
+    sf::Vector2i p0 = eptr->screenToMapCoords(topleft);
+    sf::Vector2i p1 = eptr->screenToMapCoords(bottomright);
+
+        for(int n = p0.y; n <= p1.y; n++)
+        {
+            if(p1.x < 0 || n < 0 || p1.y >= eptr->getMapHeight() || n >= eptr->getMapWidth()) return true;
+            else
+            {
+                const std::vector< std::vector<int> > *mdata = eptr->getMapData();
+
+                if( (*mdata)[n][p0.x] != 0) return true;
             }
         }
 

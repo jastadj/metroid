@@ -22,7 +22,7 @@ void Engine::start()
     m_Screen = new sf::RenderWindow(sf::VideoMode(CHUNK_SIZE*CHUNK_SCALE*SCREEN_WIDTH_CHUNKS,
                                                 CHUNK_SIZE*CHUNK_SCALE*SCREEN_HEIGHT_CHUNKS,32), "Metroid");
     m_Screen->setFramerateLimit(FRAMERATE);
-    m_Screen->setKeyRepeatEnabled(false);
+    //m_Screen->setKeyRepeatEnabled(false);
 
     initTiles();
     initGUIobjs();
@@ -187,6 +187,8 @@ void Engine::mainLoop()
     bool spritepaintersupertile = true;
     bool spritepaintersupertilesnap = true;
 
+
+
     while(!quit)
     {
         view.setCenter(viewcenter);
@@ -263,6 +265,15 @@ void Engine::mainLoop()
             }
         }
 
+        //check for keys held down
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+        {
+            if(m_Mode == MODE_PLAY) m_Player->setVelocityX(PLAYER_MOVE_SPEED);
+        }
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+        {
+            if(m_Mode == MODE_PLAY) m_Player->setVelocityX(-PLAYER_MOVE_SPEED);
+        }
 
         while(m_Screen->pollEvent(event) )
         {
@@ -290,24 +301,19 @@ void Engine::mainLoop()
                 else if(event.key.code == sf::Keyboard::A)
                 {
                     if(m_Mode == MODE_EDIT) viewcenter.x -= CHUNK_SIZE*CHUNK_SCALE;
-                    else
-                    {
-                        m_Player->run(1);
-                    }
                 }
                 else if(event.key.code == sf::Keyboard::D)
                 {
                     if(m_Mode == MODE_EDIT) viewcenter.x += CHUNK_SIZE*CHUNK_SCALE;
-                    else
-                    {
-                        m_Player->run(0);
-                    }
                 }
                 else if(event.key.code == sf::Keyboard::Space)
                 {
                     if(m_Mode == MODE_PLAY)
                     {
-                        m_Player->jump();
+                        if(m_Player->touchingBottom() )
+                        {
+                            m_Player->setVelocityY(-PLAYER_JUMP_VEL);
+                        }
                     }
                 }
                 else if(event.key.code == sf::Keyboard::F1)
@@ -331,23 +337,11 @@ void Engine::mainLoop()
                 {
                     if(event.key.code == sf::Keyboard::D)
                     {
-                        sf::Vector2f pvel = m_Player->getVelocity();
-                        //if A key is still pressed, adjust velocity appropriately
-                        if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-                        {
-                            m_Player->run(1);
-                        }
-                        else m_Player->run(-1);
+                        m_Player->setVelocityX(0);
                     }
                     else if(event.key.code == sf::Keyboard::A)
                     {
-                        sf::Vector2f pvel = m_Player->getVelocity();
-                        //if A key is still pressed, adjust velocity appropriately
-                        if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-                        {
-                            m_Player->run(0);
-                        }
-                        else m_Player->run(-1);
+                        m_Player->setVelocityX(0);
                     }
                 }
             }
