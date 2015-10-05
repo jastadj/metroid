@@ -60,6 +60,7 @@ void Ripper::update()
     if(!m_Direction) m_Vel.x = RIPPER_MOVE_SPEED;
     else m_Vel.x = -1*RIPPER_MOVE_SPEED;
 
+    m_Position += m_Vel;
     updateTransform();
 
     //if position is not valid, revert adjustment and reverse direction

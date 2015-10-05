@@ -30,27 +30,27 @@ void Player::update()
     //if(m_Vel.y > PLAYER_FALL_TERMINAL_VEL) m_Vel.y = PLAYER_FALL_TERMINAL_VEL;
 
     //advance step
-    //updateTransform();
+    m_Position += m_Vel;
+    updateTransform();
 
-    //check y axis for collision (floor, etc)
-    if(touchingBottom() && m_Vel.y > 0)
+    //make collision adjustments to position
+    if(touchingBottom())
     {
-        m_Vel.y = 0;
+        //m_Vel.y = 0;
         m_Position.y = oldpos.y;
-        updateTransform();
     }
 
 
     if(touchingRight())
     {
-        std::cout << "touching right\n";
         //m_Vel.x = 0;
+        m_Position.x = oldpos.x;
     }
 
     if(touchingLeft())
     {
-        std::cout << "touching left\n";
         //m_Vel.x = 0;
+        m_Position.x = oldpos.x;
     }
 
     //update
