@@ -196,6 +196,9 @@ void Engine::mainLoop()
 
         m_Screen->clear();
 
+        //clear debug grid boxes
+        dbg_gridboxes.clear();
+
         sf::Event event;
         sf::Vector2i mousePosi = sf::Mouse::getPosition(*m_Screen);
         sf::Vector2f mousePos = sf::Vector2f(mousePosi);
@@ -274,6 +277,15 @@ void Engine::mainLoop()
         {
             if(m_Mode == MODE_PLAY) m_Player->setVelocityX(-PLAYER_MOVE_SPEED);
         }
+        //debug - temporary, need to clean up key held down check and key release for up/down
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+        {
+            if(m_Mode == MODE_PLAY) m_Player->setVelocityY(-PLAYER_MOVE_SPEED);
+        }
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        {
+            if(m_Mode == MODE_PLAY) m_Player->setVelocityY(PLAYER_MOVE_SPEED);
+        }
 
         while(m_Screen->pollEvent(event) )
         {
@@ -337,11 +349,19 @@ void Engine::mainLoop()
                 {
                     if(event.key.code == sf::Keyboard::D)
                     {
-                        m_Player->setVelocityX(0);
+                        if(m_Mode == MODE_PLAY) m_Player->setVelocityX(0);
                     }
                     else if(event.key.code == sf::Keyboard::A)
                     {
-                        m_Player->setVelocityX(0);
+                        if(m_Mode == MODE_PLAY) m_Player->setVelocityX(0);
+                    }
+                    else if(event.key.code == sf::Keyboard::W)
+                    {
+                        if(m_Mode == MODE_PLAY) m_Player->setVelocityY(0);
+                    }
+                    else if(event.key.code == sf::Keyboard::S)
+                    {
+                        if(m_Mode == MODE_PLAY) m_Player->setVelocityY(0);
                     }
                 }
             }
@@ -459,6 +479,12 @@ void Engine::mainLoop()
             if( !m_GUIobjs[i]->visible() ) continue;
             m_GUIobjs[i]->update(mousePos);
             m_GUIobjs[i]->draw(m_Screen);
+        }
+
+        //draw debug grid boxes
+        for(int i = 0; i < dbg_gridboxes.size(); i++)
+        {
+            dbg_drawGridBox(dbg_gridboxes[i].x, dbg_gridboxes[i].y);
         }
 
         //debug info
@@ -595,4 +621,20 @@ sf::Vector2i Engine::screenToMapCoords(sf::Vector2f mousepos)
     mapcoord.y = mousepos.y / (CHUNK_SIZE*CHUNK_SCALE);
 
     return mapcoord;
+}
+
+//debug
+void Engine::dbg_addGridBox(int x, int y)
+{
+    dbg_gridboxes.push_back(sf::Vector2f(x, y));
+}
+void Engine::dbg_drawGridBox(int x, int y, sf::Color ncolor)
+{
+    sf::RectangleShape gbox(sf::Vector2f(CHUNK_SIZE*CHUNK_SCALE, CHUNK_SIZE*CHUNK_SCALE) );
+
+    gbox.setFillColor(ncolor);
+
+    gbox.setPosition(x*CHUNK_SIZE*CHUNK_SCALE, y*CHUNK_SIZE*CHUNK_SCALE);
+
+    m_Screen->draw(gbox);
 }

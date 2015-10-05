@@ -56,11 +56,13 @@ bool GameOBJ::validPosition()
     return true;
 }
 
-bool GameOBJ::touchingBottom(sf::Vector2f *coffset)
+bool GameOBJ::touchingBottom()
 {
     //get engine reference
     Engine *eptr = NULL;
     eptr = Engine::getInstance();
+
+    bool foundcollision = false;
 
     sf::Vector2f topleft( float(m_BoundingBox.left), float(m_BoundingBox.top));
     sf::Vector2f bottomright( topleft.x + m_BoundingBox.width, topleft.y + m_BoundingBox.height);
@@ -76,17 +78,15 @@ bool GameOBJ::touchingBottom(sf::Vector2f *coffset)
 
                 if( (*mdata)[p1.y][n] != 0)
                 {
-                    if(coffset != NULL)
-                    {
-                        coffset->y = p1.y*CHUNK_SCALE*CHUNK_SIZE - bottomright.y;
-                        if(coffset->y != 0) std::cout << "touching bottom y offset : " << coffset->y << std::endl;
-                    }
-                    return true;
+                    //debug
+                    eptr->dbg_addGridBox(n, p1.y);
+
+                    foundcollision = true;
                 }
             }
         }
 
-    return false;
+    return foundcollision;
 }
 
 bool GameOBJ::touchingTop()
@@ -94,6 +94,8 @@ bool GameOBJ::touchingTop()
     //get engine reference
     Engine *eptr = NULL;
     eptr = Engine::getInstance();
+
+    bool foundcollision = false;
 
     sf::Vector2f topleft( float(m_BoundingBox.left), float(m_BoundingBox.top));
     sf::Vector2f bottomright( topleft.x + m_BoundingBox.width, topleft.y + m_BoundingBox.height);
@@ -107,11 +109,17 @@ bool GameOBJ::touchingTop()
             {
                 const std::vector< std::vector<int> > *mdata = eptr->getMapData();
 
-                if( (*mdata)[p0.y][n] != 0) return true;
+                if( (*mdata)[p0.y][n] != 0)
+                {
+                    //debug
+                    eptr->dbg_addGridBox(n, p0.y);
+
+                    foundcollision = true;
+                }
             }
         }
 
-    return false;
+    return foundcollision;
 }
 
 bool GameOBJ::touchingRight()
@@ -120,6 +128,8 @@ bool GameOBJ::touchingRight()
     Engine *eptr = NULL;
     eptr = Engine::getInstance();
 
+    bool foundcollision = false;
+
     sf::Vector2f topleft( float(m_BoundingBox.left), float(m_BoundingBox.top));
     sf::Vector2f bottomright( topleft.x + m_BoundingBox.width, topleft.y + m_BoundingBox.height);
     sf::Vector2i p0 = eptr->screenToMapCoords(topleft);
@@ -132,11 +142,17 @@ bool GameOBJ::touchingRight()
             {
                 const std::vector< std::vector<int> > *mdata = eptr->getMapData();
 
-                if( (*mdata)[n][p1.x] != 0) return true;
+                if( (*mdata)[n][p1.x] != 0)
+                {
+                    //debug
+                    eptr->dbg_addGridBox(p1.x, n);
+
+                    foundcollision = true;
+                }
             }
         }
 
-    return false;
+    return foundcollision;
 }
 
 bool GameOBJ::touchingLeft()
@@ -145,6 +161,8 @@ bool GameOBJ::touchingLeft()
     Engine *eptr = NULL;
     eptr = Engine::getInstance();
 
+    bool foundcollision = false;
+
     sf::Vector2f topleft( float(m_BoundingBox.left), float(m_BoundingBox.top));
     sf::Vector2f bottomright( topleft.x + m_BoundingBox.width, topleft.y + m_BoundingBox.height);
     sf::Vector2i p0 = eptr->screenToMapCoords(topleft);
@@ -157,11 +175,17 @@ bool GameOBJ::touchingLeft()
             {
                 const std::vector< std::vector<int> > *mdata = eptr->getMapData();
 
-                if( (*mdata)[n][p0.x] != 0) return true;
+                if( (*mdata)[n][p0.x] != 0)
+                {
+                    //debug
+                    eptr->dbg_addGridBox(p0.x, n);
+
+                    foundcollision = true;
+                }
             }
         }
 
-    return false;
+    return foundcollision;
 }
 
 void GameOBJ::updateTransform()

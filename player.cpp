@@ -26,28 +26,30 @@ void Player::update()
     sf::Vector2f coffset;
 
     //apply gravity
-    m_Vel.y += PLAYER_FALL_ACCEL;
-    if(m_Vel.y > PLAYER_FALL_TERMINAL_VEL) m_Vel.y = PLAYER_FALL_TERMINAL_VEL;
+    //m_Vel.y += PLAYER_FALL_ACCEL;
+    //if(m_Vel.y > PLAYER_FALL_TERMINAL_VEL) m_Vel.y = PLAYER_FALL_TERMINAL_VEL;
 
     //advance step
     //updateTransform();
 
     //check y axis for collision (floor, etc)
-    if(touchingBottom(&coffset) && m_Vel.y > 0)
+    if(touchingBottom() && m_Vel.y > 0)
     {
         m_Vel.y = 0;
-        m_Position.y += coffset.y;
-        //updateTransform();
+        m_Position.y = oldpos.y;
+        updateTransform();
     }
 
 
     if(touchingRight())
     {
+        std::cout << "touching right\n";
         //m_Vel.x = 0;
     }
 
     if(touchingLeft())
     {
+        std::cout << "touching left\n";
         //m_Vel.x = 0;
     }
 

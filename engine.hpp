@@ -86,6 +86,11 @@ public:
     int getMapWidth() { return m_Map->getMapWidth();}
     int getMapHeight() { return m_Map->getMapHeight();}
     const std::vector< std::vector<int> > *getMapData() const { return m_Map->getMapData(); }
+
+    //debug
+    void dbg_drawGridBox(int x, int y, sf::Color ncolor = sf::Color(255,0,0,100));
+    void dbg_addGridBox(int x, int y);
+    std::vector<sf::Vector2f> dbg_gridboxes;
 };
 
 #endif // CLASS_ENGINE
