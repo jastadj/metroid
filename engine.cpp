@@ -208,49 +208,54 @@ void Engine::mainLoop()
 
 
         //if in edit mode and mouse is held down, and no gui object is being selected
-        if(m_Mode == MODE_EDIT && sf::Mouse::isButtonPressed(sf::Mouse::Left) && guiselector == NULL)
+        if(m_Mode == MODE_EDIT_PAINT)
         {
-            std::cout << "painting\n";
-            sf::Vector2i mcoord = screenToMapCoords(m_Screen->mapPixelToCoords(mousePosi));
-
-            //if grid snapping on for super tiles, fit to grid pos
-            if(spritepaintersupertile && spritepaintersupertilesnap)
+            if(sf::Mouse::isButtonPressed(sf::Mouse::Left) )
             {
-                if(mcoord.x%2) mcoord.x--;
-                if(mcoord.y%2) mcoord.y--;
-            }
+                sf::Vector2i mcoord = screenToMapCoords(m_Screen->mapPixelToCoords(mousePosi));
 
-            if(!m_Map->setTileAt(mcoord.x, mcoord.y, spritepaintertest))
-            {
-                std::cout << "Attempting to resize map dimensions...\n";
-                m_Map->resizeToContainCoord(mcoord.x, mcoord.y);
-                m_Map->setTileAt(mcoord.x, mcoord.y, spritepaintertest);
-            }
+                //if grid snapping on for super tiles, fit to grid pos
+                if(spritepaintersupertile && spritepaintersupertilesnap)
+                {
+                    if(mcoord.x%2) mcoord.x--;
+                    if(mcoord.y%2) mcoord.y--;
+                }
 
-            if(spritepaintersupertile)
-            {
-                //if unable to set tile at coordinate, resize map to contain coordinate
-                if(!m_Map->setTileAt(mcoord.x+1, mcoord.y+1, spritepaintertest+m_TilesDim.x+1))
+                if(!m_Map->setTileAt(mcoord.x, mcoord.y, spritepaintertest))
                 {
                     std::cout << "Attempting to resize map dimensions...\n";
-                    m_Map->resizeToContainCoord(mcoord.x+1, mcoord.y+1);
-                    m_Map->setTileAt(mcoord.x+1, mcoord.y+1, spritepaintertest+m_TilesDim.x+1);
-                }
-                if(spritepaintertest == 0)
-                {
-                    m_Map->setTileAt(mcoord.x, mcoord.y, 0);
-                    m_Map->setTileAt(mcoord.x+1, mcoord.y, 0);
-                    m_Map->setTileAt(mcoord.x, mcoord.y+1, 0);
-                    m_Map->setTileAt(mcoord.x+1, mcoord.y+1, 0);
-                }
-                else
-                {
-                    m_Map->setTileAt(mcoord.x+1, mcoord.y, spritepaintertest+1);
-                    m_Map->setTileAt(mcoord.x, mcoord.y+1, spritepaintertest+m_TilesDim.x);
+                    m_Map->resizeToContainCoord(mcoord.x, mcoord.y);
+                    m_Map->setTileAt(mcoord.x, mcoord.y, spritepaintertest);
                 }
 
+                if(spritepaintersupertile)
+                {
+                    //if unable to set tile at coordinate, resize map to contain coordinate
+                    if(!m_Map->setTileAt(mcoord.x+1, mcoord.y+1, spritepaintertest+m_TilesDim.x+1))
+                    {
+                        std::cout << "Attempting to resize map dimensions...\n";
+                        m_Map->resizeToContainCoord(mcoord.x+1, mcoord.y+1);
+                        m_Map->setTileAt(mcoord.x+1, mcoord.y+1, spritepaintertest+m_TilesDim.x+1);
+                    }
+                    if(spritepaintertest == 0)
+                    {
+                        m_Map->setTileAt(mcoord.x, mcoord.y, 0);
+                        m_Map->setTileAt(mcoord.x+1, mcoord.y, 0);
+                        m_Map->setTileAt(mcoord.x, mcoord.y+1, 0);
+                        m_Map->setTileAt(mcoord.x+1, mcoord.y+1, 0);
+                    }
+                    else
+                    {
+                        m_Map->setTileAt(mcoord.x+1, mcoord.y, spritepaintertest+1);
+                        m_Map->setTileAt(mcoord.x, mcoord.y+1, spritepaintertest+m_TilesDim.x);
+                    }
 
-            }
+
+                }
+            }//end mouse button pressed
+            //else mouse button is not pressed, change paint mode back to edit mode
+            else m_Mode = MODE_EDIT;
+
 
         }
         //update gui objects being manipulated
@@ -268,7 +273,6 @@ void Engine::mainLoop()
                     guiselector->doClicked();
                 }
                 guiselector = NULL;
-                std::cout << "gui selector off\n";
             }
         }
 
@@ -300,7 +304,7 @@ void Engine::mainLoop()
                 //move viewport around
                 else if(event.key.code == sf::Keyboard::W)
                 {
-                    if(m_Mode == MODE_EDIT) viewcenter.y -= CHUNK_SIZE*CHUNK_SCALE;
+                    if(m_Mode == MODE_EDIT || m_Mode == MODE_EDIT_PAINT) viewcenter.y -= CHUNK_SIZE*CHUNK_SCALE;
                     else
                     {
 
@@ -308,7 +312,7 @@ void Engine::mainLoop()
                 }
                 else if(event.key.code == sf::Keyboard::S)
                 {
-                    if(m_Mode == MODE_EDIT) viewcenter.y += CHUNK_SIZE*CHUNK_SCALE;
+                    if(m_Mode == MODE_EDIT || m_Mode == MODE_EDIT_PAINT) viewcenter.y += CHUNK_SIZE*CHUNK_SCALE;
                     else
                     {
 
@@ -316,11 +320,11 @@ void Engine::mainLoop()
                 }
                 else if(event.key.code == sf::Keyboard::A)
                 {
-                    if(m_Mode == MODE_EDIT) viewcenter.x -= CHUNK_SIZE*CHUNK_SCALE;
+                    if(m_Mode == MODE_EDIT || m_Mode == MODE_EDIT_PAINT) viewcenter.x -= CHUNK_SIZE*CHUNK_SCALE;
                 }
                 else if(event.key.code == sf::Keyboard::D)
                 {
-                    if(m_Mode == MODE_EDIT) viewcenter.x += CHUNK_SIZE*CHUNK_SCALE;
+                    if(m_Mode == MODE_EDIT || m_Mode == MODE_EDIT_PAINT) viewcenter.x += CHUNK_SIZE*CHUNK_SCALE;
                 }
                 else if(event.key.code == sf::Keyboard::Space)
                 {
@@ -389,7 +393,6 @@ void Engine::mainLoop()
                             if(!m_GUIobjs[i]->visible()) continue;
                             if( m_GUIobjs[i]->mouseOver(mousePos))
                             {
-                                std::cout << "guiselector on\n";
                                 guiselector = m_GUIobjs[i];
 
                                 guiselector->m_ClickedOffset = mousePos - sf::Vector2f(guiselector->getRect().left,
@@ -397,6 +400,9 @@ void Engine::mainLoop()
                                 break;
                             }
                         }
+
+                        //no gui was selected?  set painter mode on
+                        if(guiselector == NULL) m_Mode = MODE_EDIT_PAINT;
                     }
                     //RETURN TO MAKE GUI MANIPULATION DEAD CODE FOR NOW
                     else continue;

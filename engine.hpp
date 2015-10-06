@@ -15,7 +15,7 @@
 
 
 //metroid map 960x900
-enum {MODE_PLAY, MODE_EDIT, MODE_TOTAL};
+enum {MODE_PLAY, MODE_EDIT, MODE_EDIT_PAINT, MODE_TOTAL};
 
 class Engine
 {
