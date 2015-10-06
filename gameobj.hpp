@@ -44,6 +44,10 @@ public:
     //bounding box and collisions
     void drawBoundingBox(sf::RenderTarget *trender);
     bool validPosition();
+    bool collidingBottom();
+    bool collidingTop();
+    bool collidingLeft();
+    bool collidingRight();
     bool touchingBottom();
     bool touchingTop();
     bool touchingRight();

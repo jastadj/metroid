@@ -11,6 +11,10 @@ Player::Player()
 
     m_BoundingBoxOffset.x = 10*CHUNK_SCALE;
     m_BoundingBoxOffset.y = 9*CHUNK_SCALE;
+
+    //m_OnGround = false;
+
+    m_RunDir = PLAYER_RUN_NONE;
 }
 
 Player::~Player()
@@ -25,33 +29,109 @@ void Player::update()
     sf::Vector2f oldvel = m_Vel;
     sf::Vector2f coffset;
 
-    //apply gravity
-    //m_Vel.y += PLAYER_FALL_ACCEL;
-    //if(m_Vel.y > PLAYER_FALL_TERMINAL_VEL) m_Vel.y = PLAYER_FALL_TERMINAL_VEL;
+    if(!touchingBottom())
+    {
+        m_Vel.y += PLAYER_FALL_ACCEL;
+        if(m_Vel.y > PLAYER_FALL_TERMINAL_VEL) m_Vel.y = PLAYER_FALL_TERMINAL_VEL;
+    }
+
+    m_Position += m_Vel;
+    updateTransform();
+
+    if(collidingLeft())
+    {
+        m_Position.x = oldpos.x;
+        updateTransform();
+    }
+    else if(collidingRight())
+    {
+        m_Position.x = oldpos.x;
+        updateTransform();
+    }
+
+    //check for y-axis collision
+    if(collidingBottom())
+    {
+        m_Vel.y = 0;
+        while(!touchingBottom())
+        {
+            m_Position.y--;
+            updateTransform();
+        }
+    }
+/*
+    m_OnGround = false;
+
+    //before stepping, check if already on ground
+    if(!collidingBottom())
+    {
+        m_Position.y++;
+        updateTransform();
+
+        if(collidingBottom()) m_OnGround = true;
+
+        m_Position.y--;
+        updateTransform();
+    }
+
+    //if(m_OnGround) std::cout << "player on ground\n";
+
+    //apply gravity if not on ground
+    if(!m_OnGround)
+    {
+        m_Vel.y += PLAYER_FALL_ACCEL;
+        if(m_Vel.y > PLAYER_FALL_TERMINAL_VEL) m_Vel.y = PLAYER_FALL_TERMINAL_VEL;
+    }
+    else if( m_Vel.y > 0) m_Vel.y = 0;
 
     //advance step
     m_Position += m_Vel;
     updateTransform();
 
     //make collision adjustments to position
-    if(touchingBottom())
-    {
-        //m_Vel.y = 0;
-        m_Position.y = oldpos.y;
-    }
 
+    //if(!m_OnGround) std::cout << "not on ground\n";
 
-    if(touchingRight())
+    //resolve y axis collision
+    if(m_Vel.y > 0 && !m_OnGround)
     {
-        //m_Vel.x = 0;
+        int tempx = m_Position.x;
         m_Position.x = oldpos.x;
+
+        while(collidingBottom())
+        {
+            //m_Position.y = oldpos.y;
+            m_Position.y--;
+            updateTransform();
+        }
+
+        m_Position.x = tempx;
     }
 
-    if(touchingLeft())
+    //resolve x axis collision first
+    if(collidingRight())
     {
+
+       std::cout << "touching right\n";
         //m_Vel.x = 0;
+        //m_Position.x--;
         m_Position.x = oldpos.x;
+        updateTransform();
     }
+
+    if(collidingLeft())
+    {
+        std::cout << "touching left\n";
+        //m_Vel.x = 0;
+        //m_Position.x++;
+        m_Position.x = oldpos.x;
+
+        updateTransform();
+    }
+
+
+
+*/
 
     //update
     updateTransform();
@@ -71,25 +151,53 @@ void Player::update()
     }
     */
 
+    std::cout << "player run dir:" << m_RunDir << std::endl;
 
     //update frame
-    if(m_Vel.x > 0)
+    if(m_RunDir == PLAYER_RUN_RIGHT)
     {
         if(m_Frame > 3) m_Frame = 1;
         else m_Frame++;
         if(m_Frame > 3) m_Frame = 1;
     }
-    else if(m_Vel.x < 0)
+    else if(m_RunDir == PLAYER_RUN_LEFT)
     {
         if(m_Frame < 5) m_Frame = 6;
         else m_Frame++;
         if(m_Frame > 7) m_Frame = 5;
     }
-    else if(m_Vel.x == 0)
+    else if(m_RunDir == PLAYER_RUN_NONE)
     {
         if(m_Frame >= 0 && m_Frame <= 3) m_Frame = 0;
         else if(m_Frame >=4 && m_Frame <= 7) m_Frame = 4;
         else std::cout << "Error animating player when not running\n";
+    }
+}
+
+void Player::runRight(bool nrun)
+{
+    if(nrun)
+    {
+        m_Vel.x = PLAYER_MOVE_SPEED;
+        m_RunDir = PLAYER_RUN_RIGHT;
+    }
+    else
+    {
+        m_Vel.x = 0;
+        m_RunDir = 0;
+    }
+}
+void Player::runLeft(bool nrun)
+{
+    if(nrun)
+    {
+        m_Vel.x = -PLAYER_MOVE_SPEED;
+        m_RunDir = PLAYER_RUN_LEFT;
+    }
+    else
+    {
+        m_Vel.x = 0;
+        m_RunDir = 0;
     }
 }
 

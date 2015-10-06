@@ -271,16 +271,16 @@ void Engine::mainLoop()
         //check for keys held down
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
         {
-            if(m_Mode == MODE_PLAY) m_Player->setVelocityX(PLAYER_MOVE_SPEED);
+            if(m_Mode == MODE_PLAY) m_Player->runRight(true);
         }
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
         {
-            if(m_Mode == MODE_PLAY) m_Player->setVelocityX(-PLAYER_MOVE_SPEED);
+            if(m_Mode == MODE_PLAY) m_Player->runLeft(true);
         }
         //debug - temporary, need to clean up key held down check and key release for up/down
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
         {
-            if(m_Mode == MODE_PLAY) m_Player->setVelocityY(-PLAYER_MOVE_SPEED);
+            //if(m_Mode == MODE_PLAY) m_Player->setVelocityY(-PLAYER_MOVE_SPEED);
         }
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
         {
@@ -322,10 +322,13 @@ void Engine::mainLoop()
                 {
                     if(m_Mode == MODE_PLAY)
                     {
+
                         if(m_Player->touchingBottom() )
                         {
+                            //std::cout << "jumping with player on ground\n";
                             m_Player->setVelocityY(-PLAYER_JUMP_VEL);
                         }
+                        //else std::cout << "jumping with player not on ground\n";
                     }
                 }
                 else if(event.key.code == sf::Keyboard::F1)
@@ -349,11 +352,11 @@ void Engine::mainLoop()
                 {
                     if(event.key.code == sf::Keyboard::D)
                     {
-                        if(m_Mode == MODE_PLAY) m_Player->setVelocityX(0);
+                        if(m_Mode == MODE_PLAY) m_Player->runRight(false);
                     }
                     else if(event.key.code == sf::Keyboard::A)
                     {
-                        if(m_Mode == MODE_PLAY) m_Player->setVelocityX(0);
+                        if(m_Mode == MODE_PLAY) m_Player->runLeft(false);
                     }
                     else if(event.key.code == sf::Keyboard::W)
                     {

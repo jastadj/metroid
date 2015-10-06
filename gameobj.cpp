@@ -56,7 +56,7 @@ bool GameOBJ::validPosition()
     return true;
 }
 
-bool GameOBJ::touchingBottom()
+bool GameOBJ::collidingBottom()
 {
     //get engine reference
     Engine *eptr = NULL;
@@ -89,7 +89,7 @@ bool GameOBJ::touchingBottom()
     return foundcollision;
 }
 
-bool GameOBJ::touchingTop()
+bool GameOBJ::collidingTop()
 {
     //get engine reference
     Engine *eptr = NULL;
@@ -122,7 +122,7 @@ bool GameOBJ::touchingTop()
     return foundcollision;
 }
 
-bool GameOBJ::touchingRight()
+bool GameOBJ::collidingRight()
 {
     //get engine reference
     Engine *eptr = NULL;
@@ -152,10 +152,11 @@ bool GameOBJ::touchingRight()
             }
         }
 
+    //if(foundcollision) std::cout << "touching right\n";
     return foundcollision;
 }
 
-bool GameOBJ::touchingLeft()
+bool GameOBJ::collidingLeft()
 {
     //get engine reference
     Engine *eptr = NULL;
@@ -184,8 +185,77 @@ bool GameOBJ::touchingLeft()
                 }
             }
         }
-
+    //if(foundcollision) std::cout << "touching left\n";
     return foundcollision;
+}
+
+bool GameOBJ::touchingBottom()
+{
+    bool touching = false;
+
+    if(collidingBottom()) return false;
+
+    m_Position.y++;
+    updateTransform();
+
+    if(collidingBottom()) touching = true;
+
+    m_Position.y--;
+    updateTransform();
+
+    return touching;
+
+}
+
+bool GameOBJ::touchingTop()
+{
+    bool touching = false;
+
+    if(collidingTop()) return false;
+
+    m_Position.y--;
+    updateTransform();
+
+    if(collidingTop()) touching = true;
+
+    m_Position.y++;
+    updateTransform();
+
+    return touching;
+}
+
+bool GameOBJ::touchingLeft()
+{
+    bool touching = false;
+
+    if(collidingLeft()) return false;
+
+    m_Position.x--;
+    updateTransform();
+
+    if(collidingLeft()) touching = true;
+
+    m_Position.x++;
+    updateTransform();
+
+    return touching;
+}
+
+bool GameOBJ::touchingRight()
+{
+    bool touching = false;
+
+    if(collidingRight()) return false;
+
+    m_Position.x++;
+    updateTransform();
+
+    if(collidingRight()) touching = true;
+
+    m_Position.x--;
+    updateTransform();
+
+    return touching;
 }
 
 void GameOBJ::updateTransform()
