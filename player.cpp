@@ -152,7 +152,7 @@ void Player::update()
     }
     */
 
-    std::cout << "player run dir:" << m_RunDir << std::endl;
+    //std::cout << "player run dir:" << m_RunDir << std::endl;
 
     //update frame
     if(m_RunDir == PLAYER_RUN_RIGHT)

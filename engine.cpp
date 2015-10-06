@@ -206,26 +206,11 @@ void Engine::mainLoop()
 
 
 
-        //update gui objects being manipulated
-        if(guiselector != NULL)
-        {
-            if(guiselector->movable())
-                guiselector->setPosition( mousePos - guiselector->m_ClickedOffset + sf::Vector2f(2,2));
 
-            //if left mouse is no longer being held down, deselect gui obj
-            if(!sf::Mouse::isButtonPressed(sf::Mouse::Left))
-            {
-                //if mouse released over gui obj (assume clicked , ie button)
-                if(guiselector->mouseOver(mousePos))
-                {
-                    guiselector->doClicked();
-                }
-                guiselector = NULL;
-            }
-        }
-        //if in edit mode and mouse is held down, paint
-        if(m_Mode == MODE_EDIT && sf::Mouse::isButtonPressed(sf::Mouse::Left))
+        //if in edit mode and mouse is held down, and no gui object is being selected
+        if(m_Mode == MODE_EDIT && sf::Mouse::isButtonPressed(sf::Mouse::Left) && guiselector == NULL)
         {
+            std::cout << "painting\n";
             sf::Vector2i mcoord = screenToMapCoords(m_Screen->mapPixelToCoords(mousePosi));
 
             //if grid snapping on for super tiles, fit to grid pos
@@ -265,6 +250,25 @@ void Engine::mainLoop()
                 }
 
 
+            }
+
+        }
+        //update gui objects being manipulated
+        else if(guiselector != NULL)
+        {
+            if(guiselector->movable())
+                guiselector->setPosition( mousePos - guiselector->m_ClickedOffset + sf::Vector2f(2,2));
+
+            //if left mouse is no longer being held down, deselect gui obj
+            if(!sf::Mouse::isButtonPressed(sf::Mouse::Left))
+            {
+                //if mouse released over gui obj (assume clicked , ie button)
+                if(guiselector->mouseOver(mousePos))
+                {
+                    guiselector->doClicked();
+                }
+                guiselector = NULL;
+                std::cout << "gui selector off\n";
             }
         }
 
@@ -335,7 +339,7 @@ void Engine::mainLoop()
                 {
                     if(m_Mode == MODE_PLAY) m_Mode = MODE_EDIT;
                     else if(m_Mode == MODE_EDIT) m_Mode = MODE_PLAY;
-                    //m_GUIobjs[0]->setVisible( !m_GUIobjs[0]->visible());
+                    m_GUIobjs[0]->setVisible( !m_GUIobjs[0]->visible());
                 }
                 else if(event.key.code == sf::Keyboard::F5) m_Map->saveMapFile("map.dat");
                 else if(event.key.code == sf::Keyboard::Space)
@@ -379,25 +383,25 @@ void Engine::mainLoop()
                     //if in editor mode...
                     if(m_Mode == MODE_EDIT)
                     {
+                        //check for gui objs if mouse clicked on
+                        for(int i = 0; i < int(m_GUIobjs.size()); i++)
+                        {
+                            if(!m_GUIobjs[i]->visible()) continue;
+                            if( m_GUIobjs[i]->mouseOver(mousePos))
+                            {
+                                std::cout << "guiselector on\n";
+                                guiselector = m_GUIobjs[i];
 
-
+                                guiselector->m_ClickedOffset = mousePos - sf::Vector2f(guiselector->getRect().left,
+                                                                       guiselector->getRect().top);
+                                break;
+                            }
+                        }
                     }
                     //RETURN TO MAKE GUI MANIPULATION DEAD CODE FOR NOW
                     else continue;
 
-                    //check for gui objs if mouse clicked on
-                    for(int i = 0; i < int(m_GUIobjs.size()); i++)
-                    {
-                        if(!m_GUIobjs[i]->visible()) continue;
-                        if( m_GUIobjs[i]->mouseOver(mousePos))
-                        {
-                            guiselector = m_GUIobjs[i];
 
-                            guiselector->m_ClickedOffset = mousePos - sf::Vector2f(guiselector->getRect().left,
-                                                                   guiselector->getRect().top);
-                            break;
-                        }
-                    }
                 }
             }//end mouse button event
             else if(event.type == sf::Event::MouseWheelMoved)
