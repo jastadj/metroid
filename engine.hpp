@@ -49,6 +49,7 @@ private:
 
     //loop
     void mainLoop();
+    void updateAndDrawGUIobjs(std::vector<GUIobj*> *objlist);
     void updateEnemies();
 
     //game objects

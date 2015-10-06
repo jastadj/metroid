@@ -92,9 +92,10 @@ bool Engine::initGUIobjs()
     m_GUIobjs.push_back(newobj);
 
     newobj = new SpriteButton(m_TilesSPR[2]);
-    newobj->setVisible(false);
-    newobj->setPosition(90,90);
-    m_GUIobjs.push_back(newobj);
+    newobj->setVisible(true);
+    newobj->setPosition(10,10);
+
+    m_GUIobjs.back()->addChild(newobj);
 
     return true;
 }
@@ -493,12 +494,7 @@ void Engine::mainLoop()
         //draw ui
         m_Screen->setView(m_Screen->getDefaultView());
 
-        for(int i = 0; i < int(m_GUIobjs.size()); i++)
-        {
-            if( !m_GUIobjs[i]->visible() ) continue;
-            m_GUIobjs[i]->update(mousePos);
-            m_GUIobjs[i]->draw(m_Screen);
-        }
+        updateAndDrawGUIobjs(&m_GUIobjs);
 
         //debug info
         sf::Text debuginfo("", m_Font,12);
@@ -519,6 +515,24 @@ void Engine::updateEnemies()
     {
         m_Enemies[i]->update();
     }
+}
+
+void Engine::updateAndDrawGUIobjs(std::vector<GUIobj*> *objlist)
+{
+    if(objlist == NULL) return;
+    if(objlist->empty()) return;
+
+    for(int i = 0; i < int(objlist->size()); i++)
+    {
+        if( !(*objlist)[i]->visible() ) continue;
+        (*objlist)[i]->update(sf::Vector2f(sf::Mouse::getPosition(*m_Screen)));
+        (*objlist)[i]->draw(m_Screen);
+
+        //recursively process children
+        updateAndDrawGUIobjs( (*objlist)[i]->getChildren());
+    }
+
+
 }
 
 void Engine::drawTile(sf::RenderTarget *tscreen, int x, int y, unsigned int tindex)

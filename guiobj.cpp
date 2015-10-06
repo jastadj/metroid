@@ -6,11 +6,21 @@ GUIobj::GUIobj()
     m_Visible = false;
     m_Movable = false;
 
+    m_Parent = NULL;
 }
 
 GUIobj::~GUIobj()
 {
 
+}
+
+void GUIobj::addChild(GUIobj *tchild)
+{
+    if(tchild == NULL) return;
+
+    tchild->m_Parent = this;
+
+    m_Children.push_back(tchild);
 }
 
 //////////////////////////////////////////////////////
@@ -76,7 +86,13 @@ void SpriteButton::draw(sf::RenderTarget *rtarget)
 
 void SpriteButton::update(sf::Vector2f mousePos)
 {
-    m_Sprite->setPosition(m_Pos);
+    sf::Vector2f parentpos;
+    if(m_Parent != NULL)
+    {
+        parentpos = m_Parent->getPosition();
+        m_Sprite->setPosition(m_Pos + parentpos);
+    }
+    else m_Sprite->setPosition(m_Pos);
 }
 
 sf::FloatRect SpriteButton::getRect()
@@ -92,5 +108,5 @@ bool SpriteButton::mouseOver(sf::Vector2f mousepos)
 
 void SpriteButton::doClicked()
 {
-
+    std::cout << "button clicked\n";
 }

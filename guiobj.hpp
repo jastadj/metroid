@@ -12,6 +12,9 @@ protected:
     bool m_Visible;
     bool m_Movable;
 
+    GUIobj *m_Parent;
+    std::vector<GUIobj*> m_Children;
+
 public:
     GUIobj();
     virtual ~GUIobj();
@@ -33,6 +36,11 @@ public:
     void setMovable(bool nmove) { m_Movable = nmove;}
     bool visible() { return m_Visible;}
     bool movable() { return m_Movable;}
+
+    //void setParent(GUIobj *tparent) { m_Parent = tparent;}
+    GUIobj *getParent() { return m_Parent;}
+    void addChild(GUIobj *tchild);
+    std::vector<GUIobj*> *getChildren() { return &m_Children;}
 
 };
 
