@@ -388,6 +388,7 @@ void Engine::mainLoop()
                     //if in editor mode...
                     if(m_Mode == MODE_EDIT)
                     {
+                        /*
                         //check for gui objs if mouse clicked on
                         for(int i = 0; i < int(m_GUIobjs.size()); i++)
                         {
@@ -401,9 +402,19 @@ void Engine::mainLoop()
                                 break;
                             }
                         }
+                        */
 
+                        guiselector = getGUIclickedOn(&m_GUIobjs, mousePos);
+
+                        if(guiselector != NULL)
+                        {
+                            //guiselector = m_GUIobjs[i];
+
+                            guiselector->m_ClickedOffset = mousePos - sf::Vector2f(guiselector->getRect().left,
+                                                                   guiselector->getRect().top);
+                        }
                         //no gui was selected?  set painter mode on
-                        if(guiselector == NULL) m_Mode = MODE_EDIT_PAINT;
+                        else m_Mode = MODE_EDIT_PAINT;
                     }
                     //RETURN TO MAKE GUI MANIPULATION DEAD CODE FOR NOW
                     else continue;
@@ -533,6 +544,29 @@ void Engine::updateAndDrawGUIobjs(std::vector<GUIobj*> *objlist)
     }
 
 
+}
+
+GUIobj *Engine::getGUIclickedOn(std::vector<GUIobj*> *objlist, sf::Vector2f mousePos)
+{
+    GUIobj *selectedGUI = NULL;
+
+    //need to figure out how to reach down recursively and return gui obj clicked on if valid
+
+    //check for gui objs if mouse clicked on
+    for(int i = 0; i < int(objlist->size()); i++)
+    {
+        if(!(*objlist)[i]->visible()) continue;
+        if( (*objlist)[i]->mouseOver(mousePos))
+        {
+            selectedGUI = (*objlist)[i];
+
+            selectedGUI->m_ClickedOffset = mousePos - sf::Vector2f(selectedGUI->getRect().left,
+                                                   selectedGUI->getRect().top);
+            break;
+        }
+    }
+
+    return selectedGUI;
 }
 
 void Engine::drawTile(sf::RenderTarget *tscreen, int x, int y, unsigned int tindex)
