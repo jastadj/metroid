@@ -284,7 +284,7 @@ void Engine::mainLoop()
         }
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
         {
-            if(m_Mode == MODE_PLAY) m_Player->setVelocityY(PLAYER_MOVE_SPEED);
+            //if(m_Mode == MODE_PLAY) m_Player->setVelocityY(PLAYER_MOVE_SPEED);
         }
 
         while(m_Screen->pollEvent(event) )

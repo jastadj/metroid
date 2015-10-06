@@ -42,6 +42,7 @@ void Player::update()
     {
         m_Position.x = oldpos.x;
         updateTransform();
+
     }
     else if(collidingRight())
     {
