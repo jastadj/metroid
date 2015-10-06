@@ -457,8 +457,11 @@ void Engine::mainLoop()
         m_Player->draw(m_Screen);
         drawEnemies();
 
-        //draw ui
-        m_Screen->setView(m_Screen->getDefaultView());
+        //draw debug grid boxes
+        for(int i = 0; i < dbg_gridboxes.size(); i++)
+        {
+            dbg_drawGridBox(dbg_gridboxes[i].x, dbg_gridboxes[i].y);
+        }
 
         //draw mouse test painter
         if(spritepaintertest >= 0 && spritepaintertest < int(m_TilesSPR.size()) && m_Mode == MODE_EDIT)
@@ -477,17 +480,14 @@ void Engine::mainLoop()
             //drawTileScreenCoord(m_Screen, mousePos, spritepaintertest);
         }
 
+        //draw ui
+        m_Screen->setView(m_Screen->getDefaultView());
+
         for(int i = 0; i < int(m_GUIobjs.size()); i++)
         {
             if( !m_GUIobjs[i]->visible() ) continue;
             m_GUIobjs[i]->update(mousePos);
             m_GUIobjs[i]->draw(m_Screen);
-        }
-
-        //draw debug grid boxes
-        for(int i = 0; i < dbg_gridboxes.size(); i++)
-        {
-            dbg_drawGridBox(dbg_gridboxes[i].x, dbg_gridboxes[i].y);
         }
 
         //debug info
