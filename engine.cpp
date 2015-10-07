@@ -135,13 +135,16 @@ bool Engine::initPlayer()
     int samuswidth = 28;
 
     std::cout << "Initializing player...\n";
-    //load samus texture
-    if(!m_SamusTXT.loadFromFile("samus.png"))
+
+    //load master sprite sheet image
+    sf::Image samusmaster;
+    if(!samusmaster.loadFromFile("samus.png"))
     {
         std::cout << "Error loading samus.png!\n";
         return false;
     }
 
+/*
     //create samus sprites from texture
     for(int i = 0; i < m_SamusTXT.getSize().y/samusheight; i++)
     {
@@ -162,6 +165,7 @@ bool Engine::initPlayer()
 
     m_Player->setPositionGrid(8,10);
     std::cout << "Player initialized successfuly.\n";
+*/
 
     return true;
 }
