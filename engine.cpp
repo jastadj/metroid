@@ -404,7 +404,8 @@ void Engine::mainLoop()
                         }
                         */
 
-                        guiselector = getGUIclickedOn(&m_GUIobjs, mousePos);
+                        getGUIclickedOn(&m_GUIobjs, mousePos, guiselector);
+
 
                         if(guiselector != NULL)
                         {
@@ -546,9 +547,8 @@ void Engine::updateAndDrawGUIobjs(std::vector<GUIobj*> *objlist)
 
 }
 
-GUIobj *Engine::getGUIclickedOn(std::vector<GUIobj*> *objlist, sf::Vector2f mousePos)
+void Engine::getGUIclickedOn(std::vector<GUIobj*> *objlist, sf::Vector2f mousePos, GUIobj *selectedGUI)
 {
-    GUIobj *selectedGUI = NULL;
 
     //need to figure out how to reach down recursively and return gui obj clicked on if valid
 
@@ -566,7 +566,7 @@ GUIobj *Engine::getGUIclickedOn(std::vector<GUIobj*> *objlist, sf::Vector2f mous
         }
     }
 
-    return selectedGUI;
+
 }
 
 void Engine::drawTile(sf::RenderTarget *tscreen, int x, int y, unsigned int tindex)

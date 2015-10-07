@@ -50,7 +50,7 @@ private:
     //loop
     void mainLoop();
     void updateAndDrawGUIobjs(std::vector<GUIobj*> *objlist);
-    GUIobj *getGUIclickedOn(std::vector<GUIobj*> *objlist, sf::Vector2f mousePos);
+    void getGUIclickedOn(std::vector<GUIobj*> *objlist, sf::Vector2f mousePos, GUIobj *selectedGUI);
     void updateEnemies();
 
     //game objects
