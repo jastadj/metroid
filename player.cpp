@@ -63,120 +63,53 @@ void Player::update()
             updateTransform();
         }
     }
-/*
-    m_OnGround = false;
-
-    //before stepping, check if already on ground
-    if(!collidingBottom())
-    {
-        m_Position.y++;
-        updateTransform();
-
-        if(collidingBottom()) m_OnGround = true;
-
-        m_Position.y--;
-        updateTransform();
-    }
-
-    //if(m_OnGround) std::cout << "player on ground\n";
-
-    //apply gravity if not on ground
-    if(!m_OnGround)
-    {
-        m_Vel.y += PLAYER_FALL_ACCEL;
-        if(m_Vel.y > PLAYER_FALL_TERMINAL_VEL) m_Vel.y = PLAYER_FALL_TERMINAL_VEL;
-    }
-    else if( m_Vel.y > 0) m_Vel.y = 0;
-
-    //advance step
-    m_Position += m_Vel;
-    updateTransform();
-
-    //make collision adjustments to position
-
-    //if(!m_OnGround) std::cout << "not on ground\n";
-
-    //resolve y axis collision
-    if(m_Vel.y > 0 && !m_OnGround)
-    {
-        int tempx = m_Position.x;
-        m_Position.x = oldpos.x;
-
-        while(collidingBottom())
-        {
-            //m_Position.y = oldpos.y;
-            m_Position.y--;
-            updateTransform();
-        }
-
-        m_Position.x = tempx;
-    }
-
-    //resolve x axis collision first
-    if(collidingRight())
-    {
-
-       std::cout << "touching right\n";
-        //m_Vel.x = 0;
-        //m_Position.x--;
-        m_Position.x = oldpos.x;
-        updateTransform();
-    }
-
-    if(collidingLeft())
-    {
-        std::cout << "touching left\n";
-        //m_Vel.x = 0;
-        //m_Position.x++;
-        m_Position.x = oldpos.x;
-
-        updateTransform();
-    }
-
-
-
-*/
 
     //update
     updateTransform();
 
-    //if position is not valid, go back to old position
-    /*
-    if(!validPosition())
-    {
-        m_Position = oldpos;
-
-        if(m_Vel.x > 0) m_Vel.x = 0;
-        else if(m_Vel.x < 0) m_Vel.x = 0;
-
-        if(m_Vel.y > 0) m_Vel.y = 0;
-        else if(m_Vel.y < 0) m_Vel.y = 0;
-        updateTransform();
-    }
-    */
-
-    //std::cout << "player run dir:" << m_RunDir << std::endl;
-
     //update frame
     if(m_RunDir == PLAYER_RUN_RIGHT)
     {
-        if(m_Frame > 3) m_Frame = 1;
-        else m_Frame++;
-        if(m_Frame > 3) m_Frame = 1;
+        //if not touching the ground, set frame to jump
+        if(!touchingBottom())
+        {
+            m_Frame = 4;
+        }
+        else
+        {
+            if(m_Frame > 3) m_Frame = 1;
+            else m_Frame++;
+            if(m_Frame > 3) m_Frame = 1;
+        }
+
     }
     else if(m_RunDir == PLAYER_RUN_LEFT)
     {
-        if(m_Frame < 9) m_Frame = 9;
-        else m_Frame++;
-        if(m_Frame > 11) m_Frame = 9;
+        if(!touchingBottom())
+        {
+            m_Frame = 4 + PLAYER_FRAMES_IN_SET;
+        }
+        else
+        {
+            if(m_Frame < 1 + PLAYER_FRAMES_IN_SET) m_Frame = 1 + PLAYER_FRAMES_IN_SET;
+            else m_Frame++;
+            if(m_Frame > 3 + PLAYER_FRAMES_IN_SET) m_Frame = 1 + PLAYER_FRAMES_IN_SET;
+        }
+
     }
     else if(m_RunDir == PLAYER_RUN_NONE)
     {
-        //standing to the right
-        if(m_Frame >= 0 && m_Frame <= 3) m_Frame = 0;
-        //standing to the left
-        else if(m_Frame >=8 && m_Frame <= 11) m_Frame = 8;
-        else std::cout << "Error animating player when not running\n";
+        //if not touching the ground, set frame to jump
+        if(!touchingBottom())
+        {
+            if(facingLeft()) m_Frame = 4;
+            else m_Frame = 4 + PLAYER_FRAMES_IN_SET;
+        }
+        else
+        {
+            if(facingLeft()) m_Frame = 0;
+            else m_Frame = PLAYER_FRAMES_IN_SET;
+        }
     }
 
     //std::cout << "player frame:" << m_Frame << std::endl;
@@ -207,6 +140,18 @@ void Player::runLeft(bool nrun)
         m_Vel.x = 0;
         m_RunDir = 0;
     }
+}
+
+bool Player::facingLeft()
+{
+    if(m_Frame >= 0 && m_Frame < PLAYER_FRAMES_IN_SET) return true;
+    else return false;
+}
+
+bool Player::facingRight()
+{
+    if(!facingLeft()) return true;
+    else return false;
 }
 
 void Player::draw(sf::RenderTarget *trender)

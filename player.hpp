@@ -25,7 +25,9 @@ public:
     //bool isOnGround() { return m_OnGround;}
 
     void runRight(bool nrun);
+    bool facingRight();
     void runLeft(bool nrun);
+    bool facingLeft();
 
 };
 #endif // CLASS_PLAYER
