@@ -13,6 +13,7 @@ private:
 
     //bool m_OnGround;
     int m_RunDir; // 0 = none, 1 = right, 2 = left
+    int m_ColorVariant;
 
 public:
     Player();

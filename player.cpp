@@ -15,6 +15,9 @@ Player::Player()
     //m_OnGround = false;
 
     m_RunDir = PLAYER_RUN_NONE;
+
+    //default color variant (green)
+    m_ColorVariant = 0;
 }
 
 Player::~Player()
@@ -163,16 +166,20 @@ void Player::update()
     }
     else if(m_RunDir == PLAYER_RUN_LEFT)
     {
-        if(m_Frame < 5) m_Frame = 6;
+        if(m_Frame < 9) m_Frame = 9;
         else m_Frame++;
-        if(m_Frame > 7) m_Frame = 5;
+        if(m_Frame > 11) m_Frame = 9;
     }
     else if(m_RunDir == PLAYER_RUN_NONE)
     {
+        //standing to the right
         if(m_Frame >= 0 && m_Frame <= 3) m_Frame = 0;
-        else if(m_Frame >=4 && m_Frame <= 7) m_Frame = 4;
+        //standing to the left
+        else if(m_Frame >=8 && m_Frame <= 11) m_Frame = 8;
         else std::cout << "Error animating player when not running\n";
     }
+
+    std::cout << "player frame:" << m_Frame << std::endl;
 }
 
 void Player::runRight(bool nrun)
@@ -209,7 +216,7 @@ void Player::draw(sf::RenderTarget *trender)
     eptr = Engine::getInstance();
 
     sf::Sprite *tsprite = NULL;
-    tsprite = (*eptr->getSamusSPR())[m_Frame];
+    tsprite = (*eptr->getSamusSPR(m_ColorVariant))[m_Frame];
 
     trender->draw(*tsprite, m_Transform);
 
