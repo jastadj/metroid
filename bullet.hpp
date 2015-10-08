@@ -13,6 +13,7 @@ private:
 
     int m_BulletType;
 
+    bool m_Exploding;
     bool m_Dead;
 
 public:

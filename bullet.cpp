@@ -8,8 +8,9 @@ Bullet::Bullet(sf::Vector2f spos, sf::Vector2f svel, int stype)
 
     m_BulletType = stype;
 
-    m_MaxTimeAlive = 1000;
+    m_MaxTimeAlive = 400;
     m_Dead = false;
+    m_Exploding = false;
 }
 
 Bullet::~Bullet()
@@ -21,7 +22,7 @@ Bullet::~Bullet()
 void Bullet::update()
 {
     //check bullet life
-    if(m_Clock.getElapsedTime().asMilliseconds() > m_MaxTimeAlive)
+    if(m_Clock.getElapsedTime().asMilliseconds() > m_MaxTimeAlive && !m_Exploding)
     {
         m_Dead = true;
         return;
@@ -29,6 +30,12 @@ void Bullet::update()
 
     m_Position += m_Vel;
     updateTransform();
+
+    //check if hitting something
+    if(!validPosition())
+    {
+        m_Exploding = true;
+    }
 
 }
 
@@ -39,5 +46,10 @@ void Bullet::draw(sf::RenderTarget *trender)
     Engine *eptr = NULL;
     eptr = Engine::getInstance();
 
-    trender->draw( *(*eptr->getBulletSPR())[m_BulletType], m_Transform );
+    if(m_Exploding)
+    {
+      trender->draw( *(*eptr->getBulletSPR())[m_BulletType+1], m_Transform );
+      m_Dead = true;
+    }
+    else trender->draw( *(*eptr->getBulletSPR())[m_BulletType], m_Transform );
 }
