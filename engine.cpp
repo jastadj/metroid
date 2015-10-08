@@ -130,32 +130,117 @@ bool Engine::initEnemies()
 
 bool Engine::initPlayer()
 {
+    //initPlayer loads in the player graphics, creates additional mirrored graphics, and stores this into
+    //a template.  this template is then used for color masking to create images of samus variants to store
+    //in memory
+
     //samus sprite dimensions
     int samusheight = 40;
     int samuswidth = 28;
+    //color mask for color replacement to mask each samus color variant
+    sf::Color colormask(255,0,255,255);
+
+    //load master sprite sheet image
+    sf::Image samusmasterimg;
+    //create samus image template, for creating color variants
+    std::vector<sf::Image> m_SamusIMG_template;
+    int variant_index = 0;
 
     std::cout << "Initializing player...\n";
-    //load samus texture
-    if(!m_SamusTXT.loadFromFile("samus.png"))
+
+
+    //load samums image sprite sheet
+    if(!samusmasterimg.loadFromFile("samus.png"))
     {
         std::cout << "Error loading samus.png!\n";
         return false;
     }
 
-    //create samus sprites from texture
-    for(int i = 0; i < m_SamusTXT.getSize().y/samusheight; i++)
+    //break apart samus image sprite sheet for each frame and load into samus color template
+    for(int i = 0; i < PLAYER_FRAMES_IN_SET; i++)
     {
-        for(int n = 0; n < m_SamusTXT.getSize().x/samuswidth; n++)
+        sf::IntRect framerect;
+        framerect.left = i*samuswidth;
+        framerect.top = 0*samusheight;
+        framerect.width = samuswidth;
+        framerect.height = samusheight;
+
+        //push new image onto samus image list
+        m_SamusIMG_template.resize( m_SamusIMG_template.size()+1);
+        m_SamusIMG_template.back().create(samuswidth, samusheight, sf::Color::Transparent);
+        m_SamusIMG_template.back().copy(samusmasterimg, 0, 0, framerect, true);
+
+    }
+    //copy each image from samus left facing images and flip horizontally and add
+    for(int i = 0; i < PLAYER_FRAMES_IN_SET; i++)
+    {
+        //push new image onto samus image list
+        m_SamusIMG_template.resize( m_SamusIMG_template.size()+1);
+        m_SamusIMG_template.back() = m_SamusIMG_template[i];//.copy(m_SamusIMG[i], 0, 0, sf::IntRect(0,0,0,0), true);
+        //flip
+        m_SamusIMG_template.back().flipHorizontally();
+    }
+
+    //samus green variant
+    m_SamusIMG.push_back(m_SamusIMG_template);
+    for(int i = 0; i < int(m_SamusIMG.back().size()); i++)
+    {
+        for(int ny = 0; ny < samusheight; ny++)
         {
-            sf::IntRect srect;
-            srect.left = n * samuswidth;
-            srect.top = i * samusheight;
-            srect.width = samuswidth;
-            srect.height = samusheight;
-            sf::Sprite *newsprite = new sf::Sprite(m_SamusTXT, srect);
-            m_SamusSPR.push_back(newsprite);
+            for(int nx = 0; nx < samuswidth; nx++)
+            {
+                if(m_SamusIMG.back()[i].getPixel(nx,ny) == colormask)
+                {
+                    m_SamusIMG.back()[i].setPixel(nx,ny, sf::Color(0,0x94,0,255) );
+                }
+            }
         }
     }
+
+    //samus cyan variant 00 e8 d8
+    m_SamusIMG.push_back(m_SamusIMG_template);
+    for(int i = 0; i < int(m_SamusIMG.back().size()); i++)
+    {
+        for(int ny = 0; ny < samusheight; ny++)
+        {
+            for(int nx = 0; nx < samuswidth; nx++)
+            {
+                if(m_SamusIMG.back()[i].getPixel(nx,ny) == colormask)
+                {
+                    m_SamusIMG.back()[i].setPixel(nx,ny, sf::Color(0x00, 0xe8, 0xd8, 255) );
+                }
+            }
+        }
+    }
+
+    //create texture for each samus image / variant
+    for(int n = 0; n < int(m_SamusIMG.size()); n++)
+    {
+        //resize texture array
+        m_SamusTXT.resize( m_SamusTXT.size()+1);
+
+        //push new textures into variant array
+        for(int i = 0; i < int(m_SamusIMG[n].size()); i++)
+        {
+            m_SamusTXT.back().resize(m_SamusTXT.back().size()+1);
+            m_SamusTXT.back()[i].loadFromImage(m_SamusIMG[n][i]);
+
+        }
+    }
+
+
+    //create sprite from each samus texture
+    for(int n = 0; n < int(m_SamusTXT.size()); n++)
+    {
+        m_SamusSPR.resize(m_SamusSPR.size()+1);
+
+        for(int i = 0; i < int(m_SamusTXT[n].size()); i++)
+        {
+            sf::Sprite *newsprite = new sf::Sprite(m_SamusTXT[n][i]);
+            m_SamusSPR[n].push_back(newsprite);
+        }
+    }
+
 
     //create player object
     m_Player = new Player();
@@ -682,6 +767,18 @@ sf::Vector2i Engine::screenToMapCoords(sf::Vector2f mousepos)
     mapcoord.y = mousepos.y / (CHUNK_SIZE*CHUNK_SCALE);
 
     return mapcoord;
+}
+
+std::vector< sf::Sprite* > *Engine::getSamusSPR(int colorvariant)
+{
+    if(colorvariant < 0 || colorvariant >= int(m_SamusSPR.size()) )
+    {
+       //color variant out of bounds of sprite list!
+        std::cout << "Error getting samus sprite (color variant out of bounds!\n";
+        colorvariant = 0;
+    }
+
+    return &m_SamusSPR[colorvariant];
 }
 
 //debug
