@@ -41,6 +41,8 @@ void Player::update()
     m_Position += m_Vel;
     updateTransform();
 
+
+
     if(collidingLeft())
     {
         m_Position.x = oldpos.x;
@@ -60,6 +62,16 @@ void Player::update()
         while(!touchingBottom())
         {
             m_Position.y--;
+            updateTransform();
+        }
+    }
+
+    if(collidingTop())
+    {
+        m_Vel.y = 0;
+        while(!touchingTop())
+        {
+            m_Position.y++;
             updateTransform();
         }
     }

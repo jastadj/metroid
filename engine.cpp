@@ -490,7 +490,7 @@ void Engine::mainLoop()
                 {
                     //debug
                     sf::Vector2i mcoord = screenToMapCoords(m_Screen->mapPixelToCoords(mousePosi));
-                    std::cout << "Mouse clicked on coord : " << mcoord.x << "," << mcoord.y << std::endl;
+                    //std::cout << "Mouse clicked on coord : " << mcoord.x << "," << mcoord.y << std::endl;
 
                     //if in editor mode...
                     if(m_Mode == MODE_EDIT)
