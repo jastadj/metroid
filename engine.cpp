@@ -241,6 +241,28 @@ bool Engine::initPlayer()
         }
     }
 
+    //load bullet texture
+    if(!m_BulletTXT.loadFromFile("bullet.png"))
+    {
+        std::cout << "Error loading bullet.png\n";
+        return false;
+    }
+
+    //create bullet sprites
+    for(int i = 0; i < m_BulletTXT.getSize().y / CHUNK_SIZE; i++)
+    {
+        for(int n = 0; n < m_BulletTXT.getSize().x / CHUNK_SIZE; n++)
+        {
+            sf::IntRect myrect;
+            myrect.left = n * CHUNK_SIZE;
+            myrect.top = i * CHUNK_SIZE;
+            myrect.width = CHUNK_SIZE;
+            myrect.height = CHUNK_SIZE;
+
+            sf::Sprite *newsprite = new sf::Sprite(m_BulletTXT, myrect);
+            m_BulletSPR.push_back(newsprite);
+        }
+    }
 
     //create player object
     m_Player = new Player();
@@ -502,7 +524,11 @@ void Engine::mainLoop()
                         //no gui was selected?  set painter mode on
                         else m_Mode = MODE_EDIT_PAINT;
                     }
-                    //RETURN TO MAKE GUI MANIPULATION DEAD CODE FOR NOW
+                    else if(m_Mode == MODE_PLAY)
+                    {
+                        //shoot bullets and shit
+                        m_Bullets.push_back( m_Player->fireBullet());
+                    }
                     else continue;
 
 
@@ -558,12 +584,23 @@ void Engine::mainLoop()
         //update
         m_Player->update();
         updateEnemies();
+        for(int i = int(m_Bullets.size()-1); i >= 0; i--)
+        {
+            m_Bullets[i]->update();
+
+            if(m_Bullets[i]->isDead())
+            {
+                delete m_Bullets[i];
+                m_Bullets.erase( m_Bullets.begin() + i);
+            }
+        }
 
 
         //draw
         drawMap();
         m_Player->draw(m_Screen);
         drawEnemies();
+        for(int i = 0; i < int(m_Bullets.size()); i++) m_Bullets[i]->draw(m_Screen);
 
         //draw debug grid boxes
         for(int i = 0; i < dbg_gridboxes.size(); i++)
@@ -780,6 +817,7 @@ std::vector< sf::Sprite* > *Engine::getSamusSPR(int colorvariant)
 
     return &m_SamusSPR[colorvariant];
 }
+
 
 //debug
 void Engine::dbg_addGridBox(int x, int y)

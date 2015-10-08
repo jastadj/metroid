@@ -12,7 +12,7 @@
 #include "guiobj.hpp"
 #include "player.hpp"
 #include "enemy.hpp"
-
+#include "bullet.hpp"
 
 //metroid map 960x900
 enum {MODE_PLAY, MODE_EDIT, MODE_EDIT_PAINT, MODE_TOTAL};
@@ -41,6 +41,8 @@ private:
     std::vector< sf::Sprite* > m_TilesSPR;
     std::vector< sf::Sprite* > m_RipperSPR;
     std::vector<std::vector< sf::Sprite* > > m_SamusSPR;
+    sf::Texture m_BulletTXT;
+    std::vector< sf::Sprite*> m_BulletSPR;
     sf::Font m_Font;
 
     //draw
@@ -59,6 +61,7 @@ private:
     std::vector< GUIobj*> m_GUIobjs;
     Player *m_Player;
     std::vector< Enemy*> m_Enemies;
+    std::vector< Bullet*> m_Bullets;
 
     //draw functions
     void drawMap();
@@ -83,6 +86,7 @@ public:
     //get sprites
     std::vector< sf::Sprite* > *getRipperSPR() { return &m_RipperSPR;}
     std::vector< sf::Sprite* > *getSamusSPR(int colorvariant);
+    std::vector< sf::Sprite* > *getBulletSPR() { return &m_BulletSPR;}
 
     //map
     sf::Vector2i screenToMapCoords(sf::Vector2f mousepos);

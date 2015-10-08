@@ -168,3 +168,15 @@ void Player::draw(sf::RenderTarget *trender)
     drawBoundingBox(trender);
 }
 
+Bullet *Player::fireBullet()
+{
+    sf::Vector2f bvel;
+
+    if(facingRight()) bvel.x = PLAYER_BULLET_0_SPEED;
+    else bvel.x - PLAYER_BULLET_0_SPEED;
+
+    Bullet *newbullet = new Bullet( m_Position, bvel, 0);
+
+    return newbullet;
+
+}

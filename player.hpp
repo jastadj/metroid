@@ -2,6 +2,7 @@
 #define CLASS_PLAYER
 
 #include "gameobj.hpp"
+#include "bullet.hpp"
 
 enum {PLAYER_RUN_NONE, PLAYER_RUN_RIGHT, PLAYER_RUN_LEFT};
 
@@ -28,6 +29,8 @@ public:
     bool facingRight();
     void runLeft(bool nrun);
     bool facingLeft();
+
+    Bullet *fireBullet();
 
 };
 #endif // CLASS_PLAYER
