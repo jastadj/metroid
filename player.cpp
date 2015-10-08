@@ -179,7 +179,7 @@ void Player::update()
         else std::cout << "Error animating player when not running\n";
     }
 
-    std::cout << "player frame:" << m_Frame << std::endl;
+    //std::cout << "player frame:" << m_Frame << std::endl;
 }
 
 void Player::runRight(bool nrun)
