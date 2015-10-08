@@ -112,6 +112,13 @@ void Player::update()
         }
     }
 
+    //update bullet origin
+    if(facingRight())
+    {
+        m_BulletOriginOffset = sf::Vector2f(0,13);
+    }
+    else m_BulletOriginOffset = sf::Vector2f(20, 13);
+
     //std::cout << "player frame:" << m_Frame << std::endl;
 }
 
@@ -172,10 +179,11 @@ Bullet *Player::fireBullet()
 {
     sf::Vector2f bvel;
 
-    if(facingRight()) bvel.x = PLAYER_BULLET_0_SPEED;
-    else bvel.x - PLAYER_BULLET_0_SPEED;
+    if(facingRight()) bvel.x = -PLAYER_BULLET_0_SPEED;
+    else bvel.x = PLAYER_BULLET_0_SPEED;
 
-    Bullet *newbullet = new Bullet( m_Position, bvel, 0);
+    //std::cout << "bullet vel = " << bvel.x << "," << bvel.y << std::endl;
+    Bullet *newbullet = new Bullet( m_Position + m_BulletOriginOffset, bvel, 0);
 
     return newbullet;
 

@@ -3,9 +3,6 @@
 
 Bullet::Bullet(sf::Vector2f spos, sf::Vector2f svel, int stype)
 {
-
-    std::cout << "bullet constructed\n";
-
     m_Position = spos;
     m_Vel = svel;
 
@@ -17,7 +14,7 @@ Bullet::Bullet(sf::Vector2f spos, sf::Vector2f svel, int stype)
 
 Bullet::~Bullet()
 {
-    std::cout << "bullet destroyed\n";
+
 }
 
 
@@ -31,7 +28,6 @@ void Bullet::update()
     }
 
     m_Position += m_Vel;
-
     updateTransform();
 
 }
@@ -43,5 +39,5 @@ void Bullet::draw(sf::RenderTarget *trender)
     Engine *eptr = NULL;
     eptr = Engine::getInstance();
 
-    trender->draw( *(*eptr->getBulletSPR())[m_BulletType] );
+    trender->draw( *(*eptr->getBulletSPR())[m_BulletType], m_Transform );
 }
