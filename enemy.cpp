@@ -19,7 +19,6 @@ Enemy::~Enemy()
 // ZOOMER
 Zoomer::Zoomer()
 {
-    m_Sprite = new sf::RectangleShape(sf::Vector2f(16,16));
     m_BoundingBox = sf::FloatRect(0,0,16*CHUNK_SCALE,16*CHUNK_SCALE);
 }
 
@@ -35,9 +34,14 @@ void Zoomer::update()
 
 void Zoomer::draw(sf::RenderTarget *trender)
 {
-    trender->draw(*m_Sprite, m_Transform);
+    sf::Sprite *tsprite = NULL;
 
-    //for debug, draw bounding box
+    Engine *eptr = NULL;
+    eptr = Engine::getInstance();
+
+    trender->draw( *(*eptr->getZoomerSPR())[m_Frame], m_Transform);
+
+    //draw bounding box for debug
     drawBoundingBox(trender);
 }
 

@@ -31,7 +31,7 @@ void Bullet::update()
     m_Position += m_Vel;
     updateTransform();
 
-    //check if hitting something
+    //check if hitting map
     if(!validPosition())
     {
         m_Exploding = true;

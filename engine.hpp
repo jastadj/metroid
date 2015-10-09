@@ -33,17 +33,23 @@ private:
     bool initPlayer();
 
     //resources
+    sf::Font m_Font;
+    //map tile resources
     sf::Texture m_TilesTXT;
-    sf::Texture m_RipperTXT;
-    std::vector< std::vector<sf::Texture> > m_SamusTXT;
-    std::vector< std::vector<sf::Image> > m_SamusIMG;
     sf::Vector2u m_TilesDim;
     std::vector< sf::Sprite* > m_TilesSPR;
+    //enemy resources
+    sf::Texture m_RipperTXT;
+    sf::Texture m_ZoomerTXT;
     std::vector< sf::Sprite* > m_RipperSPR;
+    std::vector< sf::Sprite* > m_ZoomerSPR;
+    //player resources
+    std::vector< std::vector<sf::Texture> > m_SamusTXT;
+    std::vector< std::vector<sf::Image> > m_SamusIMG;
     std::vector<std::vector< sf::Sprite* > > m_SamusSPR;
     sf::Texture m_BulletTXT;
     std::vector< sf::Sprite*> m_BulletSPR;
-    sf::Font m_Font;
+
 
     //draw
     void drawTile(sf::RenderTarget *tscreen, int x, int y, unsigned int tindex); //draw tile in tile coordinates
@@ -85,6 +91,7 @@ public:
 
     //get sprites
     std::vector< sf::Sprite* > *getRipperSPR() { return &m_RipperSPR;}
+    std::vector< sf::Sprite* > *getZoomerSPR() { return &m_ZoomerSPR;}
     std::vector< sf::Sprite* > *getSamusSPR(int colorvariant);
     std::vector< sf::Sprite* > *getBulletSPR() { return &m_BulletSPR;}
 
@@ -101,3 +108,4 @@ public:
 };
 
 #endif // CLASS_ENGINE
+

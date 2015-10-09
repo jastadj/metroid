@@ -21,8 +21,6 @@ class Zoomer:public Enemy
 {
 private:
 
-    sf::RectangleShape *m_Sprite;
-
 public:
     Zoomer();
     ~Zoomer();

@@ -24,15 +24,35 @@ void Engine::start()
     m_Screen->setFramerateLimit(FRAMERATE);
     //m_Screen->setKeyRepeatEnabled(false);
 
-    initTiles();
-    initGUIobjs();
-    initEnemies();
-    initPlayer();
+    if(!initTiles())
+    {
+        std::cout << "Init tiles failed, exiting...\n";
+        exit(0);
+    };
+    if(!initGUIobjs())
+    {
+        std::cout << "Init GUI objects failed, exiting...\n";
+        exit(0);
+    };
+    if(!initEnemies())
+    {
+        std::cout << "Init enemies failed, exiting...\n";
+        exit(0);
+    };
+    if(!initPlayer())
+    {
+        std::cout << "Init player failed, exiting...\n";
+        exit(0);
+    };
 
     //init font
     std::cout << "Loading font...\n";
     if(!m_Font.loadFromFile("font.ttf"))
-        std::cout << "Error loading font.ttf\n";
+    {
+        std::cout << "Error loading font.ttf, exiting...\n";
+        exit(0);
+    }
+
 
 
     loadMap("map.dat");
@@ -85,6 +105,7 @@ bool Engine::initTiles()
 
 bool Engine::initGUIobjs()
 {
+    std::cout << "Initializing GUI objects...";
     GUIobj *newobj = new WindowPane(sf::Vector2f(CHUNK_SIZE*CHUNK_SCALE*SCREEN_WIDTH_CHUNKS,
                                                 CHUNK_SIZE*CHUNK_SCALE*4));
     newobj->setVisible(false);
@@ -97,6 +118,8 @@ bool Engine::initGUIobjs()
 
     m_GUIobjs.back()->addChild(newobj);
 
+    std::cout << "done\n";
+
     return true;
 }
 
@@ -107,6 +130,12 @@ bool Engine::initEnemies()
     if(!m_RipperTXT.loadFromFile("ripper.png") )
     {
         std::cout << "Error loading ripper.png\n";
+        return false;
+    }
+    //load zoomer
+    if(!m_ZoomerTXT.loadFromFile("zoomer.png") )
+    {
+        std::cout << "Error loading zoomer.png\n";
         return false;
     }
 
@@ -121,6 +150,19 @@ bool Engine::initEnemies()
 
         sf::Sprite *newsprite = new sf::Sprite(m_RipperTXT, newrect);
         m_RipperSPR.push_back(newsprite);
+    }
+
+    //load zoomer sprite
+    for(int i = 0; i < 2; i++)
+    {
+        sf::IntRect newrect;
+        newrect.left = i*CHUNK_SIZE*2;
+        newrect.top = 0;
+        newrect.width = CHUNK_SIZE*2;
+        newrect.height = CHUNK_SIZE;
+
+        sf::Sprite *newsprite = new sf::Sprite(m_ZoomerTXT, newrect);
+        m_ZoomerSPR.push_back(newsprite);
     }
 
     std::cout << "Enemies loaded successfuly.\n";
