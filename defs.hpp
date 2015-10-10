@@ -1,6 +1,8 @@
 #ifndef CLASS_DEFS
 #define CLASS_DEFS
 
+#define PI 3.14159
+
 #define CHUNK_SIZE 8
 #define CHUNK_SCALE 2
 #define SCREEN_WIDTH_CHUNKS 16*2
@@ -17,5 +19,6 @@
 #define PLAYER_FALL_TERMINAL_VEL 7
 
 #define RIPPER_MOVE_SPEED 1
+#define ZOOMER_MOVE_SPEED 1
 
 #endif // CLASS_DEFS

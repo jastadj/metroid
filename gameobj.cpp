@@ -3,6 +3,7 @@
 #include <string>
 
 #include "engine.hpp"
+#include <cmath>
 
 GameOBJ::GameOBJ()
 {
@@ -14,6 +15,11 @@ GameOBJ::GameOBJ()
 GameOBJ::~GameOBJ()
 {
 
+}
+
+void GameOBJ::setRotation(float nrot)
+{
+    m_Rotation = fmodf(nrot, 360.f);
 }
 
 void GameOBJ::drawBoundingBox(sf::RenderTarget *trender)
