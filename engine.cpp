@@ -160,13 +160,13 @@ bool Engine::initEnemies()
     }
 
     //load zoomer sprite
-    for(int i = 0; i < 2; i++)
+    for(int i = 0; i < 1; i++)
     {
         sf::IntRect newrect;
         newrect.left = i*CHUNK_SIZE*2;
         newrect.top = 0;
         newrect.width = CHUNK_SIZE*2;
-        newrect.height = CHUNK_SIZE;
+        newrect.height = CHUNK_SIZE*2;
 
         sf::Sprite *newsprite = new sf::Sprite(m_ZoomerTXT, newrect);
         m_ZoomerSPR.push_back(newsprite);
