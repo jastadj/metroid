@@ -14,6 +14,7 @@ protected:
     sf::Vector2f m_Scale;
     sf::Vector2f m_Vel;
     float m_Rotation;
+    sf::Vector2f m_RotationCenter;
 
     sf::FloatRect m_BoundingBox;
     sf::Vector2f m_BoundingBoxOffset;
@@ -32,6 +33,9 @@ public:
     void setPosition(sf::Vector2f npos) { m_Position = npos;}
     void setPosition(int x, int y) { setPosition(sf::Vector2f(x,y));}
     void setPositionGrid(int x, int y) { setPosition( sf::Vector2f(x*CHUNK_SIZE*CHUNK_SCALE, y*CHUNK_SIZE*CHUNK_SCALE) );}
+    void setRotation(float nrot) { m_Rotation = nrot;}
+    void setRotationCenter(sf::Vector2f nrotcenter) { m_RotationCenter = nrotcenter;}
+    float getRotation() { return m_Rotation;}
     void setVelocity(float x, float y) { m_Vel = sf::Vector2f(x,y);}
     void setVelocity(sf::Vector2f nvel) { m_Vel = nvel;}
     void setVelocityX(float xvel) { m_Vel.x = xvel;}

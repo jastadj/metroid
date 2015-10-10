@@ -322,6 +322,8 @@ void Engine::mainLoop()
     //debug
     Enemy *newenemy = new Zoomer();
     newenemy->setPositionGrid(1,1);
+    newenemy->setRotationCenter(sf::Vector2f(8,8) );
+    newenemy->setRotation(180);
     m_Enemies.push_back(newenemy);
     newenemy = new Ripper();
     newenemy->setPositionGrid(4,4);

@@ -262,10 +262,30 @@ void GameOBJ::updateTransform()
 {
 
     m_Transform = sf::Transform();
-    m_Transform.scale(m_Scale);
-    m_Transform.translate(m_Position);
+    sf::Transform t_ScaleRot;
 
-    sf::Vector2f testpoint = m_Transform.transformPoint(0,0);
+    //scale image
+    t_ScaleRot.scale(m_Scale);
+
+    //translate to rotation center
+    t_ScaleRot.translate( sf::Vector2f(m_RotationCenter.x, m_RotationCenter.y) );
+
+    //rotate
+    t_ScaleRot.rotate(m_Rotation);
+    //move back to topleft corner default
+    t_ScaleRot.translate(sf::Vector2f(-m_RotationCenter.x, -m_RotationCenter.y));
+
+
+    //translate position
+    m_Transform.translate( sf::Vector2f(m_Position.x *CHUNK_SCALE, m_Position.y * CHUNK_SCALE) );
+    //combine scale and rotation transform with position transform
+    m_Transform.combine(t_ScaleRot);
+
+
+
+    //update bounding box
+    //sf::Vector2f testpoint = m_Transform.transformPoint(0,0);
+    sf::Vector2f testpoint = sf::Vector2f(m_Position.x * m_Scale.x, m_Position.y * m_Scale.y);
     m_BoundingBox.left = testpoint.x + m_BoundingBoxOffset.x;
     m_BoundingBox.top = testpoint.y + m_BoundingBoxOffset.y;
 }
