@@ -18,32 +18,44 @@ void Engine::start()
     m_Mode = MODE_PLAY;
 
     //init screen
-    std::cout << "Initializing render window...\n";
+    std::cout << "Initializing render window...";
     m_Screen = new sf::RenderWindow(sf::VideoMode(CHUNK_SIZE*CHUNK_SCALE*SCREEN_WIDTH_CHUNKS,
                                                 CHUNK_SIZE*CHUNK_SCALE*SCREEN_HEIGHT_CHUNKS,32), "Metroid");
     m_Screen->setFramerateLimit(FRAMERATE);
     //m_Screen->setKeyRepeatEnabled(false);
+    std::cout << "done.\n";
 
+    std::cout << "Initialzing tiles...";
     if(!initTiles())
     {
-        std::cout << "Init tiles failed, exiting...\n";
+        std::cout << "failed, exiting...\n";
         exit(0);
-    };
+    }
+    else std::cout << "done.\n";
+
+    std::cout << "Initializing GUI objects...";
     if(!initGUIobjs())
     {
-        std::cout << "Init GUI objects failed, exiting...\n";
+        std::cout << "failed, exiting...\n";
         exit(0);
-    };
+    }
+    else std::cout << "done.\n";
+
+    std::cout << "Initializing enemies...";
     if(!initEnemies())
     {
-        std::cout << "Init enemies failed, exiting...\n";
+        std::cout << "failed, exiting...\n";
         exit(0);
-    };
+    }
+    else std::cout << "done.\n";
+
+    std::cout << "Initializing player...";
     if(!initPlayer())
     {
-        std::cout << "Init player failed, exiting...\n";
+        std::cout << "failed, exiting...\n";
         exit(0);
-    };
+    }
+    else std::cout << "done.\n";
 
     //init font
     std::cout << "Loading font...\n";
@@ -53,9 +65,9 @@ void Engine::start()
         exit(0);
     }
 
-
-
+    std::cout << "Loading map.dat...";
     loadMap("map.dat");
+    std::cout << "done.\n";
 
     std::cout << "Starting main loop...\n";
     mainLoop();
@@ -68,7 +80,6 @@ Engine::~Engine()
 
 bool Engine::initTiles()
 {
-    std::cout << "Initializing tiles...\n";
 
     //load in texture sprite sheet
     if(!m_TilesTXT.loadFromFile("tiles.png"))
@@ -99,13 +110,12 @@ bool Engine::initTiles()
         }
     }
 
-    std::cout << "Loaded " << m_TilesSPR.size() << " tiles successfully.\n";
+    //std::cout << "Loaded " << m_TilesSPR.size() << " tiles successfully.\n";
     return true;
 }
 
 bool Engine::initGUIobjs()
 {
-    std::cout << "Initializing GUI objects...";
     GUIobj *newobj = new WindowPane(sf::Vector2f(CHUNK_SIZE*CHUNK_SCALE*SCREEN_WIDTH_CHUNKS,
                                                 CHUNK_SIZE*CHUNK_SCALE*4));
     newobj->setVisible(false);
@@ -118,14 +128,11 @@ bool Engine::initGUIobjs()
 
     m_GUIobjs.back()->addChild(newobj);
 
-    std::cout << "done\n";
-
     return true;
 }
 
 bool Engine::initEnemies()
 {
-    std::cout << "Initializing enemies...\n";
     //load ripper
     if(!m_RipperTXT.loadFromFile("ripper.png") )
     {
@@ -165,8 +172,6 @@ bool Engine::initEnemies()
         m_ZoomerSPR.push_back(newsprite);
     }
 
-    std::cout << "Enemies loaded successfuly.\n";
-
     return true;
 }
 
@@ -187,8 +192,6 @@ bool Engine::initPlayer()
     //create samus image template, for creating color variants
     std::vector<sf::Image> m_SamusIMG_template;
     int variant_index = 0;
-
-    std::cout << "Initializing player...\n";
 
 
     //load samums image sprite sheet
@@ -310,7 +313,6 @@ bool Engine::initPlayer()
     m_Player = new Player();
 
     m_Player->setPositionGrid(8,10);
-    std::cout << "Player initialized successfuly.\n";
 
     return true;
 }
