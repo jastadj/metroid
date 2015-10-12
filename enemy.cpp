@@ -10,6 +10,8 @@
 Enemy::Enemy()
 {
     m_Direction = 0;
+    m_Alive = true;
+    m_Health = 1;
 }
 
 Enemy::~Enemy()
@@ -33,6 +35,9 @@ void Zoomer::update()
 {
     int dir_to_check = 0;  // 1 = top, 2 = right, 3 = bottom, 4 = left
     bool needs_rotation = false;
+
+    Engine *eptr = NULL;
+    eptr = Engine::getInstance();
 
     //update zoomer velocity based on rotation and move direction
     m_Vel.x = cos(m_Rotation * PI / 180) * ZOOMER_MOVE_SPEED;
@@ -143,9 +148,10 @@ void Zoomer::update()
             }
             else if(m_Direction == 1 && !touchingLeft())
             {
-                //super buggy shit
+
                 m_Position.y += 1;
-                m_Position.x -= 5;
+                //super buggy shit
+                //m_Position.x -= 5;
                 updateTransform();
 
                 needs_rotation = true;
@@ -187,6 +193,26 @@ void Zoomer::update()
         if(m_Direction == 0) setRotation( getRotation() - 90);
         else setRotation( getRotation() + 90);
     }
+
+    //check if bullets are hitting it
+    std::vector< Bullet*> *bullets = eptr->getBullets();
+    //go through all bullets
+    for(int i = int(bullets->size()-1); i >= 0; i--)
+    {
+        //if enemy bounding box intersects bullet's bounding box, it's a hit
+        if( m_BoundingBox.intersects( *(*bullets)[i]->getBoundingBox()) )
+        {
+            std::cout << "hit\n";
+            //kill bullet, need to add explosion frame
+            (*bullets)[i]->setDead(true);
+
+            //decrease enemy health
+            m_Health--;
+        }
+    }
+
+    //check if enemy is dead
+    if(m_Health <= 0) m_Alive = false;
 
 }
 

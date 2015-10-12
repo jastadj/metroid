@@ -47,6 +47,7 @@ public:
 
     //bounding box and collisions
     void drawBoundingBox(sf::RenderTarget *trender);
+    sf::FloatRect *getBoundingBox() { return &m_BoundingBox;}
     bool validPosition();
     bool collidingBottom();
     bool collidingTop();

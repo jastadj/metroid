@@ -95,6 +95,9 @@ public:
     std::vector< sf::Sprite* > *getSamusSPR(int colorvariant);
     std::vector< sf::Sprite* > *getBulletSPR() { return &m_BulletSPR;}
 
+    //game objects
+    std::vector< Bullet*> *getBullets() { return &m_Bullets;}
+
     //map
     sf::Vector2i screenToMapCoords(sf::Vector2f mousepos);
     int getMapWidth() { return m_Map->getMapWidth();}

@@ -692,9 +692,16 @@ void Engine::mainLoop()
 
 void Engine::updateEnemies()
 {
-    for(int i = 0; i < int(m_Enemies.size()); i++)
+    for(int i = int(m_Enemies.size()-1); i >= 0; i--)
     {
         m_Enemies[i]->update();
+
+        //if enemy is dead, delete it
+        if(!m_Enemies[i]->isAlive())
+        {
+            delete m_Enemies[i];
+            m_Enemies.erase(m_Enemies.begin() + i);
+        }
     }
 }
 

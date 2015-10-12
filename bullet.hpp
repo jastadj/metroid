@@ -24,5 +24,6 @@ public:
     void draw(sf::RenderTarget *trender);
 
     bool isDead() { return m_Dead;}
+    void setDead(bool ndead) { m_Dead = ndead;}
 };
 #endif // CLASS_BULLET
