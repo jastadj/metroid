@@ -12,8 +12,8 @@ Bullet::Bullet(sf::Vector2f spos, sf::Vector2f svel, int stype)
     m_Dead = false;
     m_Exploding = false;
 
-    m_BoundingBox = sf::FloatRect(0,0,8*CHUNK_SCALE,8*CHUNK_SCALE);
-    //m_BoundingBoxOffset = sf::Vector2f(2,2);
+    m_BoundingBox = sf::FloatRect(0,0,4*CHUNK_SCALE,5*CHUNK_SCALE);
+    m_BoundingBoxOffset = sf::Vector2f(2*CHUNK_SCALE,2*CHUNK_SCALE);
 }
 
 Bullet::~Bullet()
