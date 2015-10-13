@@ -321,10 +321,10 @@ void Engine::mainLoop()
 {
     //debug
     Enemy *newenemy = new Zoomer();
-    newenemy->setPositionGrid(3,1);
+    newenemy->setPositionGrid(1,5);
     newenemy->setRotationCenter(sf::Vector2f(8,8) );
     newenemy->setRotation(180);
-    newenemy->setDirection(1);
+    newenemy->setDirection(0);
     m_Enemies.push_back(newenemy);
     newenemy = new Ripper();
     newenemy->setPositionGrid(3,4);
@@ -636,11 +636,12 @@ void Engine::mainLoop()
         //update
         m_Player->update();
         updateEnemies();
+        //update bullets
         for(int i = int(m_Bullets.size()-1); i >= 0; i--)
         {
             m_Bullets[i]->update();
 
-            if(m_Bullets[i]->isDead())
+            if(!m_Bullets[i]->isAlive())
             {
                 delete m_Bullets[i];
                 m_Bullets.erase( m_Bullets.begin() + i);
@@ -687,7 +688,7 @@ void Engine::mainLoop()
         debuginfo.setColor(sf::Color::Red);
         std::stringstream dinfoss;
         sf::Vector2i mcoord = screenToMapCoords(m_Screen->mapPixelToCoords(sf::Vector2i(mousePosRel)) );
-        dinfoss << "mouse:" << mousePos.x << "," << mousePos.y << "  rel(" << mousePosRel.x << "," << mousePosRel.y << ")  grid(" << mcoord.x << "," << mcoord.y << ")";
+        dinfoss << "mouse:" << mousePos.x << "," << mousePos.y << "  rel(" << mousePosRel.x << "," << mousePosRel.y << ")  grid(" << mcoord.x/2 << "," << mcoord.y/2 << ")";
         debuginfo.setString(dinfoss.str());
         m_Screen->draw(debuginfo);
 

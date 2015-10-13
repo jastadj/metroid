@@ -204,7 +204,8 @@ void Zoomer::update()
         {
             std::cout << "hit\n";
             //kill bullet, need to add explosion frame
-            (*bullets)[i]->setDead(true);
+            //(*bullets)[i]->setDead(true);
+            (*bullets)[i]->explode();
 
             //decrease enemy health
             m_Health--;

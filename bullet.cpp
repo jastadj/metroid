@@ -9,7 +9,6 @@ Bullet::Bullet(sf::Vector2f spos, sf::Vector2f svel, int stype)
     m_BulletType = stype;
 
     m_MaxTimeAlive = 400;
-    m_Dead = false;
     m_Exploding = false;
 
     m_BoundingBox = sf::FloatRect(0,0,4*CHUNK_SCALE,5*CHUNK_SCALE);
@@ -27,7 +26,7 @@ void Bullet::update()
     //check bullet life
     if(m_Clock.getElapsedTime().asMilliseconds() > m_MaxTimeAlive && !m_Exploding)
     {
-        m_Dead = true;
+        m_Alive = false;
         return;
     }
 
@@ -52,7 +51,7 @@ void Bullet::draw(sf::RenderTarget *trender)
     if(m_Exploding)
     {
       trender->draw( *(*eptr->getBulletSPR())[m_BulletType+1], m_Transform );
-      m_Dead = true;
+      m_Alive = false;
     }
     else trender->draw( *(*eptr->getBulletSPR())[m_BulletType], m_Transform );
 

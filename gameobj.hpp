@@ -22,6 +22,7 @@ protected:
     int m_Frame;
 
     sf::Clock m_Clock;
+    bool m_Alive;
 
 public:
 
@@ -42,6 +43,8 @@ public:
     void setVelocityY(float yvel) { m_Vel.y = yvel;}
 
     virtual void update()=0;
+    bool isAlive() { return m_Alive;}
+    void setAlive(bool nalive) { m_Alive = nalive;}
     virtual void updateTransform();
     virtual void draw(sf::RenderTarget *trender)=0;
 

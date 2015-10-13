@@ -14,7 +14,6 @@ private:
     int m_BulletType;
 
     bool m_Exploding;
-    bool m_Dead;
 
 public:
     Bullet(sf::Vector2f spos, sf::Vector2f svel, int stype);
@@ -23,7 +22,7 @@ public:
     void update();
     void draw(sf::RenderTarget *trender);
 
-    bool isDead() { return m_Dead;}
-    void setDead(bool ndead) { m_Dead = ndead;}
+    void explode() { m_Exploding = true;}
+
 };
 #endif // CLASS_BULLET

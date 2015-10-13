@@ -10,8 +10,7 @@ protected:
     int m_Direction;
     int m_Health;
 
-    //this should be moved to base class, and clean up bullet class
-    bool m_Alive;
+
 public:
     Enemy();
     ~Enemy();
@@ -19,8 +18,6 @@ public:
     void setDirection(int ndir) { m_Direction = ndir;}
     int getDirection() { return m_Direction;}
 
-    //this should be moved to base class
-    bool isAlive() { return m_Alive;}
 };
 
 class Zoomer:public Enemy
@@ -44,7 +41,6 @@ public:
     ~Ripper();
 
     void update();
-    void updateSprite();
     void draw(sf::RenderTarget *trender);
 };
 #endif // CLASS_ENEMY
