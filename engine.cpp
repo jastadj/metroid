@@ -462,9 +462,9 @@ void Engine::mainLoop()
                 else if(event.key.code == sf::Keyboard::W)
                 {
                     if(m_Mode == MODE_EDIT || m_Mode == MODE_EDIT_PAINT) viewcenter.y -= CHUNK_SIZE*CHUNK_SCALE;
-                    else
+                    else if(m_Mode == MODE_PLAY)
                     {
-
+                        m_Player->setAimingUp(true);
                     }
                 }
                 else if(event.key.code == sf::Keyboard::S)
@@ -528,7 +528,7 @@ void Engine::mainLoop()
                     }
                     else if(event.key.code == sf::Keyboard::W)
                     {
-                        if(m_Mode == MODE_PLAY) m_Player->setVelocityY(0);
+                        if(m_Mode == MODE_PLAY) m_Player->setAimingUp(false);
                     }
                     else if(event.key.code == sf::Keyboard::S)
                     {

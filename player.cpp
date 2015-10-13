@@ -17,6 +17,7 @@ Player::Player()
     m_RunDir = PLAYER_RUN_NONE;
 
     m_Jumping = false;
+    m_AimingUp = false;
 
     //default color variant (green)
     m_ColorVariant = 0;
@@ -95,6 +96,7 @@ void Player::update()
     updateTransform();
 
     //update frame
+    //player is running to the right
     if(m_RunDir == PLAYER_RUN_RIGHT)
     {
         //if not touching the ground, set frame to jump
@@ -110,6 +112,7 @@ void Player::update()
         }
 
     }
+    //player is running to the left
     else if(m_RunDir == PLAYER_RUN_LEFT)
     {
         if(!touchingBottom())
@@ -124,27 +127,44 @@ void Player::update()
         }
 
     }
+    //player is standing still
     else if(m_RunDir == PLAYER_RUN_NONE)
     {
         //if not touching the ground, set frame to jump
         if(!touchingBottom())
         {
-            if(facingLeft()) m_Frame = 4;
+            if(facingRight()) m_Frame = 4;
             else m_Frame = 4 + PLAYER_FRAMES_IN_SET;
         }
+        //else player is touching the ground
         else
         {
-            if(facingLeft()) m_Frame = 0;
-            else m_Frame = PLAYER_FRAMES_IN_SET;
+            if(facingRight())
+            {
+                std::cout << "facing right\n";
+                //if player is aiming up
+                if(m_AimingUp) m_Frame = 9;
+                //if not, just standing frame
+                else m_Frame = 0;
+            }
+            //else player is facing left
+            else
+            {
+                std::cout << "facing left\n";
+                //if player is aiming up
+                if(m_AimingUp) m_Frame = PLAYER_FRAMES_IN_SET;
+                //if not, just standing frame
+                else m_Frame = PLAYER_FRAMES_IN_SET;
+            }
         }
     }
 
     //update bullet origin
     if(facingRight())
     {
-        m_BulletOriginOffset = sf::Vector2f(0,13);
+        m_BulletOriginOffset = sf::Vector2f(20, 13);
     }
-    else m_BulletOriginOffset = sf::Vector2f(20, 13);
+    else m_BulletOriginOffset = sf::Vector2f(0,13);
 
     //std::cout << "player frame:" << m_Frame << std::endl;
 }
@@ -176,15 +196,15 @@ void Player::runLeft(bool nrun)
     }
 }
 
-bool Player::facingLeft()
+bool Player::facingRight()
 {
     if(m_Frame >= 0 && m_Frame < PLAYER_FRAMES_IN_SET) return true;
     else return false;
 }
 
-bool Player::facingRight()
+bool Player::facingLeft()
 {
-    if(!facingLeft()) return true;
+    if(!facingRight()) return true;
     else return false;
 }
 
@@ -206,8 +226,8 @@ Bullet *Player::fireBullet()
 {
     sf::Vector2f bvel;
 
-    if(facingRight()) bvel.x = -PLAYER_BULLET_0_SPEED;
-    else bvel.x = PLAYER_BULLET_0_SPEED;
+    if(facingRight()) bvel.x = PLAYER_BULLET_0_SPEED;
+    else bvel.x = -PLAYER_BULLET_0_SPEED;
 
     //std::cout << "bullet vel = " << bvel.x << "," << bvel.y << std::endl;
     Bullet *newbullet = new Bullet( m_Position + m_BulletOriginOffset, bvel, 0);

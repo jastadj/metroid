@@ -12,6 +12,7 @@ private:
 
     sf::Clock m_JumpClock;
     bool m_Jumping;
+    bool m_AimingUp;
 
     sf::Vector2f m_BulletOriginOffset;
     //bool m_OnGround;
@@ -33,6 +34,7 @@ public:
     bool facingLeft();
 
     void jump();
+    void setAimingUp(bool naimup) { m_AimingUp = naimup;}
 
     Bullet *fireBullet();
 
