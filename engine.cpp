@@ -320,6 +320,7 @@ bool Engine::initPlayer()
 void Engine::mainLoop()
 {
     //debug
+    /*
     Enemy *newenemy = new Zoomer();
     newenemy->setPositionGrid(3,1);
     newenemy->setRotationCenter(sf::Vector2f(8,8) );
@@ -329,6 +330,8 @@ void Engine::mainLoop()
     newenemy = new Ripper();
     newenemy->setPositionGrid(4,4);
     m_Enemies.push_back(newenemy);
+    */
+
 
     bool quit = false;
 
