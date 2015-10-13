@@ -348,6 +348,13 @@ void Engine::mainLoop()
 
     while(!quit)
     {
+        //if in play mode, center viewport on player
+        if(m_Mode == MODE_PLAY)
+        {
+            viewcenter.x = m_Player->getBoundingBox()->left + 0.5*m_Player->getBoundingBox()->width;
+            //viewcenter.y = m_Player->getBoundingBox()->top + 0.5*m_Player->getBoundingBox()->height;
+        }
+
         view.setCenter(viewcenter);
         m_Screen->setView(view);
 
