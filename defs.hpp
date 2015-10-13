@@ -4,7 +4,7 @@
 #define PI 3.14159
 
 #define CHUNK_SIZE 8
-#define CHUNK_SCALE 2
+#define CHUNK_SCALE 4
 #define SCREEN_WIDTH_CHUNKS 16*2
 #define SCREEN_HEIGHT_CHUNKS 15*2
 

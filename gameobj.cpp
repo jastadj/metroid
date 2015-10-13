@@ -23,6 +23,11 @@ void GameOBJ::setRotation(float nrot)
     m_Rotation = fmodf(nrot, 360.f);
 }
 
+void GameOBJ::setPositionGrid(int x, int y)
+{
+    setPosition( sf::Vector2f(x*CHUNK_SIZE*2, y*CHUNK_SIZE*2) );
+}
+
 void GameOBJ::drawBoundingBox(sf::RenderTarget *trender)
 {
     sf::RectangleShape bbox( sf::Vector2f(m_BoundingBox.width-2, m_BoundingBox.height-2) );

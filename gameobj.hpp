@@ -33,7 +33,7 @@ public:
     sf::Vector2f getVelocity() { return m_Vel;}
     void setPosition(sf::Vector2f npos) { m_Position = npos;}
     void setPosition(int x, int y) { setPosition(sf::Vector2f(x,y));}
-    void setPositionGrid(int x, int y) { setPosition( sf::Vector2f(x*CHUNK_SIZE*CHUNK_SCALE, y*CHUNK_SIZE*CHUNK_SCALE) );}
+    void setPositionGrid(int x, int y);
     void setRotation(float nrot);
     void setRotationCenter(sf::Vector2f nrotcenter) { m_RotationCenter = nrotcenter;}
     float getRotation() { return m_Rotation;}

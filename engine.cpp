@@ -327,7 +327,7 @@ void Engine::mainLoop()
     newenemy->setDirection(0);
     m_Enemies.push_back(newenemy);
     newenemy = new Ripper();
-    newenemy->setPositionGrid(3,4);
+    newenemy->setPositionGrid(1,1);
     m_Enemies.push_back(newenemy);
 
 
