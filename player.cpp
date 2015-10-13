@@ -141,18 +141,16 @@ void Player::update()
         {
             if(facingRight())
             {
-                std::cout << "facing right\n";
                 //if player is aiming up
-                if(m_AimingUp) m_Frame = 9;
+                if(m_AimingUp) m_Frame = 8;
                 //if not, just standing frame
                 else m_Frame = 0;
             }
             //else player is facing left
             else
             {
-                std::cout << "facing left\n";
                 //if player is aiming up
-                if(m_AimingUp) m_Frame = PLAYER_FRAMES_IN_SET;
+                if(m_AimingUp) m_Frame = PLAYER_FRAMES_IN_SET + 8;
                 //if not, just standing frame
                 else m_Frame = PLAYER_FRAMES_IN_SET;
             }
@@ -160,7 +158,12 @@ void Player::update()
     }
 
     //update bullet origin
-    if(facingRight())
+    if(m_AimingUp)
+    {
+        if(facingRight()) m_BulletOriginOffset = sf::Vector2f(11,2);
+        else m_BulletOriginOffset = sf::Vector2f(9,2);
+    }
+    else if(facingRight())
     {
         m_BulletOriginOffset = sf::Vector2f(20, 13);
     }
@@ -226,7 +229,8 @@ Bullet *Player::fireBullet()
 {
     sf::Vector2f bvel;
 
-    if(facingRight()) bvel.x = PLAYER_BULLET_0_SPEED;
+    if(m_AimingUp) bvel.y = -PLAYER_BULLET_0_SPEED;
+    else if(facingRight()) bvel.x = PLAYER_BULLET_0_SPEED;
     else bvel.x = -PLAYER_BULLET_0_SPEED;
 
     //std::cout << "bullet vel = " << bvel.x << "," << bvel.y << std::endl;
