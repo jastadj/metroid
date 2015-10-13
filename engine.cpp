@@ -320,7 +320,6 @@ bool Engine::initPlayer()
 void Engine::mainLoop()
 {
     //debug
-    /*
     Enemy *newenemy = new Zoomer();
     newenemy->setPositionGrid(3,1);
     newenemy->setRotationCenter(sf::Vector2f(8,8) );
@@ -328,9 +327,9 @@ void Engine::mainLoop()
     newenemy->setDirection(1);
     m_Enemies.push_back(newenemy);
     newenemy = new Ripper();
-    newenemy->setPositionGrid(4,4);
+    newenemy->setPositionGrid(3,4);
     m_Enemies.push_back(newenemy);
-    */
+
 
 
     bool quit = false;
@@ -488,13 +487,16 @@ void Engine::mainLoop()
                 {
                     if(m_Mode == MODE_PLAY)
                     {
+                        m_Player->jump();
 
+                        /*
                         if(m_Player->touchingBottom() )
                         {
                             //std::cout << "jumping with player on ground\n";
                             m_Player->setVelocityY(-PLAYER_JUMP_VEL);
                         }
                         //else std::cout << "jumping with player not on ground\n";
+                        */
                     }
                 }
                 else if(event.key.code == sf::Keyboard::F1)

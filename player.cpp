@@ -16,6 +16,8 @@ Player::Player()
 
     m_RunDir = PLAYER_RUN_NONE;
 
+    m_Jumping = false;
+
     //default color variant (green)
     m_ColorVariant = 0;
 }
@@ -32,11 +34,23 @@ void Player::update()
     sf::Vector2f oldvel = m_Vel;
     sf::Vector2f coffset;
 
+    //if player is not touching the ground
     if(!touchingBottom())
     {
-        m_Vel.y += PLAYER_FALL_ACCEL;
-        if(m_Vel.y > PLAYER_FALL_TERMINAL_VEL) m_Vel.y = PLAYER_FALL_TERMINAL_VEL;
+        //is player currently in a jump state?  if so, keep jump vel going
+        if(m_JumpClock.getElapsedTime().asMilliseconds() <= PLAYER_JUMP_TIMEOUT_MS && m_Jumping)
+        {
+            m_Vel.y = -PLAYER_JUMP_VEL;
+        }
+        //if not jumping, then player is falling, apply gravity
+        else
+        {
+            m_Vel.y += PLAYER_FALL_ACCEL;
+            if(m_Vel.y > PLAYER_FALL_TERMINAL_VEL) m_Vel.y = PLAYER_FALL_TERMINAL_VEL;
+        }
+
     }
+    //else player is on the ground
 
     m_Position += m_Vel;
     updateTransform();
@@ -59,6 +73,7 @@ void Player::update()
     if(collidingBottom())
     {
         m_Vel.y = 0;
+        m_Jumping = false;
         while(!touchingBottom())
         {
             m_Position.y--;
@@ -199,4 +214,15 @@ Bullet *Player::fireBullet()
 
     return newbullet;
 
+}
+
+void Player::jump()
+{
+
+    if(touchingBottom())
+    {
+        m_JumpClock.restart();
+        m_Jumping = true;
+        m_Vel.y = -PLAYER_JUMP_VEL;
+    }
 }

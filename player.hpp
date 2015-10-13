@@ -10,7 +10,8 @@ class Player: public GameOBJ
 {
 private:
 
-    sf::Clock debugclock;
+    sf::Clock m_JumpClock;
+    bool m_Jumping;
 
     sf::Vector2f m_BulletOriginOffset;
     //bool m_OnGround;
@@ -30,6 +31,8 @@ public:
     bool facingRight();
     void runLeft(bool nrun);
     bool facingLeft();
+
+    void jump();
 
     Bullet *fireBullet();
 
