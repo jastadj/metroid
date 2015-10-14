@@ -142,7 +142,7 @@ void Player::update()
             if(facingRight())
             {
                 //if player is aiming up
-                if(m_AimingUp) m_Frame = 8;
+                if(m_AimingUp) m_Frame = 12;
                 //if not, just standing frame
                 else m_Frame = 0;
             }
@@ -150,7 +150,7 @@ void Player::update()
             else
             {
                 //if player is aiming up
-                if(m_AimingUp) m_Frame = PLAYER_FRAMES_IN_SET + 8;
+                if(m_AimingUp) m_Frame = PLAYER_FRAMES_IN_SET + 12;
                 //if not, just standing frame
                 else m_Frame = PLAYER_FRAMES_IN_SET;
             }
